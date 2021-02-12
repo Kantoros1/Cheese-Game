@@ -1,9 +1,12 @@
 from random import randint
 
-#def printC(var):
-    #if cheese_mode == False:
-        #print(var)
-
+def printC(var=''):
+    global cheese_mode
+    if cheese_mode == False:
+        print(var)
+    else:
+        print('- cheese')
+        
 ## --------     Combat       ---------
 
 def combat(action,choicenum1): #Player attack start
@@ -19,7 +22,7 @@ def monster_attack(): #Monster attack start
     for monster in monsters:
         status = attack("player", monster)
         if status == "death":
-            print("! You Died.")
+            printC("! You Died.")
             death = True
 
 def attack(victim, attacker): #Damage being dealt
@@ -36,21 +39,21 @@ def attack(victim, attacker): #Damage being dealt
 
     evasion = evade(victim_position)
     if evasion == "no damage":
-        print("- " + victim + " evaded the attack, so no damage was dealt.")
+        printC("- " + victim + " evaded the attack, so no damage was dealt.")
         return "alive"
 
-    damage = round(float(monster_stats[attacker_position * 5 + 1]) - float(monster_stats[attacker_position * 5 + 1]) * (float(monster_stats[victim_position * 5 + 3]) / 100),2)
-    monster_stats[victim_position * 5 + 2] = float(monster_stats[victim_position * 5 + 2]) - damage
+    damage = float(monster_stats[attacker_position * 5 + 1]) - float(monster_stats[attacker_position * 5 + 1]) * (float(monster_stats[victim_position * 5 + 3]) / 100)
+    monster_stats[victim_position * 5 + 2] = round(float(monster_stats[victim_position * 5 + 2]) - damage,2)
     remaining = monster_stats[victim_position * 5 + 2]
     if remaining < 0:
         remaining = 0
 
-    print("- " + attacker + " attacked " + victim + " and dealt " + str(damage) + " damage, " + str(remaining) + " remaining.")
+    printC("- " + attacker + " attacked " + victim + " and dealt " + str(damage) + " damage, " + str(remaining) + " remaining.")
     
-    if int(monster_stats[victim_position * 5 + 2]) <= 0: #control whether the victim died
+    if monster_stats[victim_position * 5 + 2] <= 0: #control whether the victim died
         for i in range(5):
             monster_stats.pop(victim_position * 5)
-        print("- The "+ victim +" died!")
+        printC("- The "+ victim +" died!")
         return "death"
     else:
         return "alive"
@@ -70,19 +73,19 @@ def grabItem(room,item):
     for i in world_map[map_pointer]:
         if i[0] == item:
             world_map[map_pointer].remove(i)
-    print('- grabbed {}'.format(item))
+    printC('- grabbed {}'.format(item))
 
 def openDoor(door,inventory):
     global roomInx
     if door == "wooden door":
         if "key" in playerInv:
-            print("Oops, the key broke. But hey, door's open!")
+            printC("Oops, the key broke. But hey, door's open!")
             roomInx.remove("wooden_door")
             roomInx.append("wooden_door_open")
         else:
-            print("Door's locked.")
+            printC("Door's locked.")
     else:
-        print("Door's open.")
+        printC("Door's open.")
         roomInx.remove("door")
         roomInx.append("door_open")
 
@@ -102,19 +105,19 @@ def readFile(): # reads the map file and translates into 3D list
             
             world_map.append(room)
 
-        #print(world_map)
+        #printC(world_map)
 
 def find_room(pointer): # Searches all rooms until it finds the same index, returns position in 3D list
         i = 0
         for room in world_map: 
             
             if room[0][2] == pointer:
-                print('- ' + room[0][1])
+                printC('- ' + room[0][1])
                 return i
             i += 1        
 
 def console(): # Main class
-    global world_map, map_pointer, player_health
+    global world_map, map_pointer, player_health, cheese_mode
     roomInx = world_map[map_pointer] # Copy room into buffer RoomInx
     room = [*[x[0] for x in roomInx][1:],'room'] # Creates a list of thing in the room
 
@@ -127,8 +130,8 @@ def console(): # Main class
             monster_stats.append(item[0])
             monster_stats.extend(item[4][1:-1].split(',')) # Fixing formatting
             monsters.append(item[0])
-            print('! ' + item[1])
-            print('- Enemy\'s attack: {0}, Enemy\'s health: {1}, Enemy\'s armor: {2}'.format(monster_stats[-4], monster_stats[-3],monster_stats[-2]))
+            printC('! ' + item[1])
+            printC('- Enemy\'s attack: {0}, Enemy\'s health: {1}, Enemy\'s armor: {2}'.format(monster_stats[-4], monster_stats[-3],monster_stats[-2]))
 
             del world_map[map_pointer][x]          
 
@@ -137,22 +140,22 @@ def console(): # Main class
 
     if len(inp) != 2: # Check inst length
         if inp[0] == 'cheese':
-            print('- cheese')
+            printC('- cheese')
+            cheese_mode = ~cheese_mode
         else:
-            print('? I\'m not sure what you want')
+            printC('? I\'m not sure what you want')
     elif inp[1] not in room and inp[1] not in monsters: # Checks second par is valid
-        print('? Sorry, that object is not in this room')
+        printC('? Sorry, that object is not in this room')
         
     elif inp[0] == 'examine': # Examine command
         if inp[1] == 'room': # If specified, will list all items in room
-            print('- The room contains: ',end='')
+            printC('- The room contains:')
             for i in room[:-1]:
-                print(i,end=', ')
-            print()
-        else: # Prints description of item
+                printC('- ' + i)
+        else: # printCs description of item
             for item in roomInx: # looks through all items until it finds the right one
                 if item[0] == inp[1]:
-                    print(item[1])
+                    printC(item[1])
 
     elif inp[0] == 'grab': # Grab command
         if inp[1] == 'everything': # If specified, will attempt to grab everything
@@ -166,7 +169,7 @@ def console(): # Main class
                     if item[2] == '1':
                         grabItem(map_pointer,item[0])
                     else:
-                        print('! Cant grab {}'.format(item[0]))
+                        printC('! Cant grab {}'.format(item[0]))
                 x += 1
             
 
@@ -181,18 +184,18 @@ def console(): # Main class
 
     elif inp == ["open","door"]:
         doorType = "door"
-    
+
         if "door" in roomInx or "wooden_door" in roomInx:
-            if "door" in roomInx and "wooden_door" in roomInx:
+            if "door" in roomInx and "wooden_door" in roomInx: # Lol
                 doorType = input("There's a wooden door and one made out of whatever (just call it a door). Which one do you want to open? ").lower()
             elif "wooden_door" in roomInx:
                 doorType = "wooden door"
             openDoor(doorType,playerInv)
         
-        else: print("All doors are open. You cannot gaze beyond, but every so often their ambience breaks into a subtle indication of movement.")
+        else: printC("All doors are open. You cannot gaze beyond, but every so often their ambience breaks into a subtle indication of movement.")
 
     else:
-        print('? Sorry, i dont know what you want')
+        printC('? Sorry, i dont know what you want')
 
     monster_attack()
 
@@ -208,6 +211,7 @@ map_pointer = 0
 monsters = []
 monster_stats = ['player','3','15','2','10']
 playerInv = []
+cheese_mode = False
 
 # ------ init -----
 readFile()
