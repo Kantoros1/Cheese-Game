@@ -7,9 +7,14 @@ ch
 
 the bad syndrome is when there is a dark orb instead of brain
 
-  Treatments:
-    life expectancy
-    
-    brain combing
-    
-    the sludge
+:)
+
+Pewdiepie 2010
+
+Treatments:    
+
+1-life expectancy        
+
+3-brain combing        
+
+4-the sludge
