@@ -7,6 +7,9 @@ def printC(var=''):
     else:
         print('- cheese')
         
+def you_are_stinky_boy(name):
+    print(name, 'you are stinky boy!')
+        
 ## --------     Combat       ---------
 
 def combat(action,choicenum1): #Player attack start
