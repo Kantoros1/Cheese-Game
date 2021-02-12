@@ -1,0 +1,22 @@
+#
+room1;As you enter the dungeon, and the large gate closes behind you, you realize there's no going back;[0,1]
+table;it's a table. there's a lamp on it, but that's about it.;0;0
+lamp;a lamp. it's bolted to the table.;1;0
+door;A door! it leads to another room.;0;0;[0,2]
+#
+room2;You walk into the second room. it's a bit colder, but not like it's gonna stop you;[0,2]
+key;a universal key to a door.;1;0
+door;A door! it leads to another room.;0;0;[0,1]
+goblin;Ah! A goblin!;0;1;[1,3,15,2]
+wooden_door;A wooden door! it leads to another room, but this one needs a key;0;0;[1,2]
+#
+room3;This is getting annoying;[1,2]
+wooden_door;A wooden door! it leads to another room.;0;0;[0,2]
+cheese;cheese;1;0
+goblin;Ah! A goblin!;0;1;[3,10,15,2]
+#
+
+
+Name;Comment;Grabbable;Enemy;[stats]/[pos]
+
+Name,Attack,Health,Percentage of attack deflected,Chance to deflect completely
