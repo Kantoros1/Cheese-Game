@@ -1,4 +1,4 @@
-# Cheese-Game
+# CheeseGame
 cheese
 cheese
 cheese 
