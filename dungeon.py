@@ -7,9 +7,6 @@ def printC(var=''):
     else:
         print('- cheese')
         
-def you_are_stinky_boy(name):
-    print(name, 'you are stinky boy!')
-        
 ## --------     Combat       ---------
 
 def combat(action,choicenum1): #Player attack start
@@ -34,10 +31,10 @@ def attack(victim, attacker): #Damage being dealt
     
     x = 0
     for i in monster_stats: #finding the position of the victim and the attacker
-        if i == victim:
-            victim_position = int(x / 5)
-        if i == attacker:
-            attacker_position = int(x / 5)
+        if i[0] == victim:
+            victim_position = x
+        if i[0] == attacker:
+            attacker_position = x
         x = x + 1 
 
     evasion = evade(victim_position)
@@ -45,17 +42,16 @@ def attack(victim, attacker): #Damage being dealt
         printC("- " + victim + " evaded the attack, so no damage was dealt.")
         return "alive"
 
-    damage = float(monster_stats[attacker_position * 5 + 1]) - float(monster_stats[attacker_position * 5 + 1]) * (float(monster_stats[victim_position * 5 + 3]) / 100)
-    monster_stats[victim_position * 5 + 2] = round(float(monster_stats[victim_position * 5 + 2]) - damage,2)
-    remaining = monster_stats[victim_position * 5 + 2]
+    damage = round(float(monster_stats[attacker_position][1]) - float(monster_stats[attacker_position][1]) * (float(monster_stats[victim_position][3]) / 100),2)
+    monster_stats[victim_position][2] = float(monster_stats[victim_position][2]) - damage
+    remaining = monster_stats[victim_position][2]
     if remaining < 0:
         remaining = 0
 
-    printC("- " + attacker + " attacked " + victim + " and dealt " + str(damage) + " damage, " + str(remaining) + " remaining.")
+    printC("- " + attacker + " attacked " + victim + " and dealt " + str(round(damage,1)) + " damage, " + str(round(remaining,1)) + " remaining.")
     
-    if monster_stats[victim_position * 5 + 2] <= 0: #control whether the victim died
-        for i in range(5):
-            monster_stats.pop(victim_position * 5)
+    if int(monster_stats[victim_position][2]) <= 0: #control whether the victim died
+        monster_stats.pop(victim_position)
         printC("- The "+ victim +" died!")
         return "death"
     else:
@@ -63,7 +59,7 @@ def attack(victim, attacker): #Damage being dealt
 
 def evade(victim_position): #Did the victim evade?
     evade = randint(1,100)
-    if evade <= int(monster_stats[victim_position * 5 + 4]):
+    if evade <= int(monster_stats[victim_position][4]):
         return "no damage"
     else:
         return "damage"
@@ -72,11 +68,19 @@ def evade(victim_position): #Did the victim evade?
 
 def grabItem(room,item):
     global playerInv, world_map
-    playerInv.append(item)
-    for i in world_map[map_pointer]:
-        if i[0] == item:
+    playerInv.append(item[0])
+    for i in world_map[map_pointer]: # Find item in world map, and delete
+        if i[0] == item[0]:
             world_map[map_pointer].remove(i)
-    printC('- grabbed {}'.format(item))
+    printC('- grabbed {}'.format(item[0]))
+    stats = item[3][1:-1].split(',')
+    for i, st in enumerate(zip(stats,['attack','health','evade'])):
+        if int(st[0]) != 0:
+            dire = 'increased' if int(st[0]) > 0 else 'decreased'
+            print('- Player\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1]))
+            monster_stats[0][i+1] += int(st[0])
+            
+        
 
 def openDoor(door,inventory):
     global roomInx
@@ -131,12 +135,12 @@ def console(): # Main class
     x = 0
     for item in roomInx[1:]:
         x += 1
-        if item[3] == '1':
-            monster_stats.append(item[0])
-            monster_stats.extend(item[4][1:-1].split(',')) # Fixing formatting
+        if item[2] == 'enemy':
+            monster_stats.append([item[0],*[int(i) for i in item[3][1:-1].split(',')]]) # Every time i use * i want to stop coding and go live in the woods alone
+            print(monster_stats)
             monsters.append(item[0])
             printC('! ' + item[1])
-            printC('- Enemy\'s attack: {0}, Enemy\'s health: {1}, Enemy\'s armor: {2}'.format(monster_stats[-4], monster_stats[-3],monster_stats[-2]))
+            printC('- Enemy\'s attack: {0}, Enemy\'s health: {1}, Enemy\'s armor: {2}'.format(monster_stats[-1][1], monster_stats[-1][2],monster_stats[-1][3]))
 
             del world_map[map_pointer][x]          
 
@@ -147,6 +151,9 @@ def console(): # Main class
         if inp[0] == 'cheese':
             printC('- cheese')
             cheese_mode = ~cheese_mode
+
+        elif inp[0] == 'help':
+            print('- possible commands:\n- help\n- examine [object]\n- grab [object]\n- attack [monster]\n- move [door]\n- cheese')
         else:
             printC('? I\'m not sure what you want')
     elif inp[1] not in room and inp[1] not in monsters: # Checks second par is valid
@@ -161,18 +168,21 @@ def console(): # Main class
             for item in roomInx: # looks through all items until it finds the right one
                 if item[0] == inp[1]:
                     printC(item[1])
+            if inp[1] in monsters:
+                inx = 5* (monsters.index(inp[1]) + 1)
+                print('- This {0} has {1} attack and {2} health'.format(*monster_stats[inx:inx+3]))
 
     elif inp[0] == 'grab': # Grab command
         if inp[1] == 'everything': # If specified, will attempt to grab everything
             for item in roomInx:
-                if item[2] == '1':
-                    grabItem(map_pointer,item[0])
+                if item[2] == 'grabable':
+                    grabItem(map_pointer,item)
         else: # Grab specified item, if possible
             x = 0
             for item in roomInx:
                 if item[0] == inp[1]:
-                    if item[2] == '1':
-                        grabItem(map_pointer,item[0])
+                    if item[2] == 'grabable':
+                        grabItem(map_pointer,item)
                     else:
                         printC('! Cant grab {}'.format(item[0]))
                 x += 1
@@ -185,7 +195,7 @@ def console(): # Main class
     elif inp[0] == 'move': # TODO:// Check if door is open. also: implement closed doors
         for item in roomInx:
             if item[0] == inp[1]:
-                map_pointer = find_room(item[4])
+                map_pointer = find_room(item[3])
 
     elif inp == ["open","door"]:
         doorList = []
@@ -214,8 +224,8 @@ def console(): # Main class
 
     monster_attack()
 
-    if len(monster_stats) == 5:
-        monster_stats[2] = player_health
+    if len(monster_stats) == 1:
+        monster_stats[0][2] = player_health
     
 # --------- Global variables ---------
 
@@ -224,12 +234,13 @@ death = False
 world_map = []
 map_pointer = 0
 monsters = []
-monster_stats = ['player','3','15','2','10']
+monster_stats = [['player',3,15,2,10]]
 playerInv = []
 cheese_mode = False
 
 # ------ init -----
 readFile()
 find_room('[0,1]')
+
 while death == False:
     console()
