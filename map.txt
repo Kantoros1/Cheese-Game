@@ -21,7 +21,7 @@ door;A door! it leads to another room.;door;[1,2]
 pixie;pixie;enemy;[3,3,15,2]
 #
 
-Name;Comment;type;[stats]/[pos]
-
-monsters:[Attack,Health,Percentage of attack deflected,Chance to deflect completely]
-items:[increase of attack,increase of health,increase chance to deflect]
+Formatting:
+Objects: Name;Comment;type;[stats]
+monsters stats:[Attack,Health,Percentage of attack deflected,Chance to deflect completely]
+items stats:[increase of attack,increase of health,increase chance to deflect]

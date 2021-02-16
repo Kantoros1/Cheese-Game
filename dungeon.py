@@ -84,17 +84,19 @@ def grabItem(room,item):
 
 def openDoor(door,inventory):
     global roomInx
-    if door == "wooden door":
+    if door[2] == "locked":
         if "key" in playerInv:
             printC("Oops, the key broke. But hey, door's open!")
-            roomInx.remove("wooden_door")
-            roomInx.append("wooden_door_open")
+            roomInx.remove("_".join(door))
+            door[2] = "open"
+            roomInx.append("_".join(door))
         else:
             printC("Door's locked.")
     else:
         printC("Door's open.")
-        roomInx.remove("door")
-        roomInx.append("door_open")
+        roomInx.remove("_".join(door))
+        door[2] = "open"
+        roomInx.append("_".join(door))
 
 def attackJ(monster): # For jirka
     combat('Utok',monster)
@@ -196,14 +198,24 @@ def console(): # Main class
                 map_pointer = find_room(item[3])
 
     elif inp == ["open","door"]:
-        doorType = "door"
+        doorList = []
+        doorNums = []
+        doorNo = ""
+        door = []
 
-        if "door" in roomInx or "wooden_door" in roomInx:
-            if "door" in roomInx and "wooden_door" in roomInx: # Lol
-                doorType = input("There's a wooden door and one made out of whatever (just call it a door). Which one do you want to open? ").lower()
-            elif "wooden_door" in roomInx:
-                doorType = "wooden door"
-            openDoor(doorType,playerInv)
+        for i in roomInx:
+            if i.split("_")[0] == "door":
+                doorList.append(i)
+                doorNums.append(i.split("_")[1])
+            if len(doorList) > 1:
+                doorNo = input("There's multiple doors in the room, marked " + str(doorNums) + ". Pick one: ").lower()
+                for y in doorList:
+                    if doorNo in y.split("_"):
+                        door = y.split("_")
+            else:
+                door = doorList[0].split("_")
+            if door == []: printC("Invalid input. Try again.")
+            else: openDoor(door,playerInv)
         
         else: printC("All doors are open. You cannot gaze beyond, but every so often their ambience breaks into a subtle indication of movement.")
 
