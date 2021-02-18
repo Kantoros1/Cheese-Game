@@ -1,0 +1,28 @@
+#
+room1;As you enter the dungeon, and the large gate closes behind you, you realize there's no going back;[0,1]
+table;it's a table. there's a lamp on it, but that's about it.;none
+lamp;a lamp. it's bolted to the table.;grabable;[0,1,0]
+door_1;A door! it leads to another room.;door;[0,2];locked
+iron_sword;A shiny new sword! I wanted to get one of these for a long time.;grabable;[1,0,1]
+key;bich;grabable;[0,0,0]
+#
+room2;You walk into the second room. it's a bit colder, but not like it's gonna stop you;[0,2]
+key;a universal key to a door.;grabable
+door_1;A door! it leads to another room.;door;[0,1];unlocked
+goblin;Ah! A goblin!;enemy;[2,2,5,2]
+door_2;A wooden door! it leads to another room, but this one needs a key;door;[1,2];locked
+#
+room3;This is getting annoying.A third room wow so crazy;[1,2]
+door_1;A wooden door! it leads to another room.;door;[0,2];unlocked
+cheese;cheese;grabable;[1000,1000,0]
+door_2;A door! it leads to another room.;door;[2,2];locked
+#
+room4;room;[2,2]
+door_1;A door! it leads to another room.;door;[1,2];unlocked
+pixie;pixie;enemy;[3,3,15,2]
+#
+
+Formatting:
+Objects: Name;Comment;type;[stats]
+monsters stats:[Attack,Health,Percentage of attack deflected,Chance to deflect completely]
+items stats:[increase of attack,increase of health,increase chance to deflect]
