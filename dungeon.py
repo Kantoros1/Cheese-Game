@@ -79,24 +79,6 @@ def grabItem(room,item):
             dire = 'increased' if int(st[0]) > 0 else 'decreased'
             print('- Player\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1]))
             monster_stats[0][i+1] += int(st[0])
-            
-        
-
-def openDoor(door,inventory):
-    global roomInx
-    if door[2] == "locked":
-        if "key" in playerInv:
-            printC("Oops, the key broke. But hey, door's open!")
-            roomInx.remove("_".join(door))
-            door[2] = "open"
-            roomInx.append("_".join(door))
-        else:
-            printC("Door's locked.")
-    else:
-        printC("Door's open.")
-        roomInx.remove("_".join(door))
-        door[2] = "open"
-        roomInx.append("_".join(door))
 
 def attackJ(monster): # For jirka
     combat('Utok',monster)
@@ -137,7 +119,6 @@ def console(): # Main class
         x += 1
         if item[2] == 'enemy':
             monster_stats.append([item[0],*[int(i) for i in item[3][1:-1].split(',')]]) # Every time i use * i want to stop coding and go live in the woods alone
-            print(monster_stats)
             monsters.append(item[0])
             printC('! ' + item[1])
             printC('- Enemy\'s attack: {0}, Enemy\'s health: {1}, Enemy\'s armor: {2}'.format(monster_stats[-1][1], monster_stats[-1][2],monster_stats[-1][3]))
@@ -156,8 +137,6 @@ def console(): # Main class
             print('- possible commands:\n- help\n- examine [object]\n- grab [object]\n- attack [monster]\n- move [door]\n- cheese')
         else:
             printC('? I\'m not sure what you want')
-    elif inp[1] not in room and inp[1] not in monsters: # Checks second par is valid
-        printC('? Sorry, that object is not in this room')
         
     elif inp[0] == 'examine': # Examine command
         if inp[1] == 'room': # If specified, will list all items in room
@@ -188,36 +167,25 @@ def console(): # Main class
                 x += 1
             
 
-    elif inp[0] == 'attack': 
+    elif inp[0] in ['attack',"brutalize"]:
         if inp[1] in monsters:
             attackJ(inp[1])
 
     elif inp[0] == 'move': # TODO:// Check if door is open. also: implement closed doors
         for item in roomInx:
             if item[0] == inp[1]:
-                map_pointer = find_room(item[3])
-
-    elif inp == ["open","door"]:
-        doorList = []
-        doorNums = []
-        doorNo = ""
-        door = []
-
-        for i in roomInx:
-            if i.split("_")[0] == "door":
-                doorList.append(i)
-                doorNums.append(i.split("_")[1])
-            if len(doorList) > 1:
-                doorNo = input("There's multiple doors in the room, marked " + str(doorNums) + ". Pick one: ").lower()
-                for y in doorList:
-                    if doorNo in y.split("_"):
-                        door = y.split("_")
-            else:
-                door = doorList[0].split("_")
-            if door == []: printC("Invalid input. Try again.")
-            else: openDoor(door,playerInv)
-        
-        else: printC("All doors are open. You cannot gaze beyond, but every so often their ambience breaks into a subtle indication of movement.")
+                if item[2] == "door":
+                    if item[4] == "unlocked":
+                        map_pointer = find_room(item[3])
+                    else:
+                        if "key" in playerInv:
+                            map_pointer = find_room(item[3])
+                            playerInv.remove("key")
+                            print("- Door = unlocked\n- Key = broke lmao")
+                        else:
+                            print("- Bich you ain' got no damn key in this hoe")
+                else:
+                    print("- This ain' no damn door, fool")
 
     else:
         printC('? Sorry, i dont know what you want')
