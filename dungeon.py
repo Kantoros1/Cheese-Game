@@ -6,7 +6,70 @@ def printC(var=''):
         print(var)
     else:
         print('- cheese')
-        
+
+
+def save():
+    global death
+    saves = open("save.txt", "a")
+    name = input("Pojmenujte váš savefile")
+    saves.write(name)
+    saves.close()
+    save = open(name +".txt", "w")
+    save.write(str(monster_stats) + "\n")
+    save.write(str(player_health) + "\n")
+    save.write(str(monsters) + "\n")
+    save.write(str(playerInv) + "\n")
+    save.write(str(map_pointer) + "\n")
+    save.write(str(lastroom))
+    save.close()
+    death = True
+
+def load():
+    global monster_stats, player_health, monsters, playerInv, map_pointer, lastroom
+    x = 0
+    y = 0
+    monster_stats = [[]]
+    listofsa = open("save.txt", "r")
+    print(listofsa.read())
+    listofsa.close()
+    name = input("Jaký save file?")
+    load = open(name + ".txt", "r")
+    epic = load.read()
+    load.close()
+    epic2 = epic.split("\n")
+
+    epic2[0] = epic2[0].replace("]","")
+    epic2[0] = epic2[0].replace("[","")
+    epic2[0] = epic2[0].replace("'","")
+    epic3 = epic2[0].split(", ")
+    
+    for i in epic3:
+        if y == 5:
+            x +=1
+            monster_stats.append([])
+        monster_stats[x].append(i)
+        y+=1
+
+    player_health = int(epic2[1])
+    epic2[2] = epic2[2].replace("]","")
+    epic2[2] = epic2[2].replace("[","")
+    epic2[2] = epic2[2].replace("'","")
+    epic4 = epic2[2].split(", ")
+    monsters = epic4
+
+    epic2[3] = epic2[3].replace("]","")
+    epic2[3] = epic2[3].replace("[","")
+    epic2[3] = epic2[3].replace("'","")
+    epic4 = epic2[3].split(", ")
+    if epic4[0] == "":
+        epic4.pop()
+    playerInv = epic4
+   
+    map_pointer = int(epic2[4])
+
+    lastroom = epic2[5]
+    print(lastroom)
+
 ## --------     Combat       ---------
 
 def combat(action,choicenum1): #Player attack start
@@ -66,6 +129,33 @@ def evade(victim_position): #Did the victim evade?
 
 ## -------- Input / Room read ---------
 
+def menu():
+    global monster_stats, player_health, loady
+##--------- Menu --------
+    choice = input("New game, load, end")
+
+    if choice == "end":
+        death = True
+    elif choice == "load":
+        loady = True
+        load()
+    elif choice == "New game":
+        monst = []
+        mon = open("player.txt", "r")
+        tex = mon.read()
+        deb = tex.replace("\n", "")
+        deb = deb.split(";")
+        print(deb)
+        x = 0
+        choice2 = input("choose class")
+    
+        for i in deb:
+            if i == choice2:
+                monster_stats.append([deb[x+1],*[int(i) for i in deb[x+2][1:-1].split(',')]])
+                print(monster_stats)
+            x += 1
+    player_health = monster_stats[0][2]
+    
 def grabItem(room,item):
     global playerInv, world_map
     playerInv.append(item[0])
@@ -80,7 +170,7 @@ def grabItem(room,item):
             print('- Player\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1]))
             monster_stats[0][i+1] += int(st[0])
 
-def attackJ(monster): # For jirka
+def attackJ(monster):
     combat('Utok',monster)
     
 def readFile(): # reads the map file and translates into 3D list
@@ -95,7 +185,7 @@ def readFile(): # reads the map file and translates into 3D list
                 room.append(lineF.split(';')[:]) # Split lines into elements
             
             world_map.append(room)
-
+            
         #printC(world_map)
 
 def find_room(pointer): # Searches all rooms until it finds the same index, returns position in 3D list
@@ -108,7 +198,7 @@ def find_room(pointer): # Searches all rooms until it finds the same index, retu
             i += 1        
 
 def console(): # Main class
-    global world_map, map_pointer, player_health, cheese_mode
+    global world_map, map_pointer, player_health, cheese_mode, death, lastroom
     roomInx = world_map[map_pointer] # Copy room into buffer RoomInx
     room = [*[x[0] for x in roomInx][1:],'room'] # Creates a list of thing in the room
 
@@ -135,6 +225,10 @@ def console(): # Main class
 
         elif inp[0] == 'help':
             print('- possible commands:\n- help\n- examine [object]\n- grab [object]\n- attack [monster]\n- move [door]\n- cheese')
+        elif inp[0] == 'end':
+            death = True
+        elif inp[0] == 'save':
+            save()
         else:
             printC('? I\'m not sure what you want')
         
@@ -179,9 +273,10 @@ def console(): # Main class
                         map_pointer = find_room(item[3])
                     else:
                         if "key" in playerInv:
-                            map_pointer = find_room(item[3])
-                            playerInv.remove("key")
                             print("- Door = unlocked\n- Key = broke lmao")
+                            map_pointer = find_room(item[3])
+                            lastroom = item[3]
+                            playerInv.remove("key")
                         else:
                             print("- Bich you ain' got no damn key in this hoe")
                 else:
@@ -197,18 +292,22 @@ def console(): # Main class
     
 # --------- Global variables ---------
 
-player_health = 15
+player_health = 10
 death = False
+lastroom = '[0,1]'
+loady = False
 world_map = []
 map_pointer = 0
 monsters = []
-monster_stats = [['player',3,15,2,10]]
+monster_stats = []
 playerInv = []
 cheese_mode = False
 
 # ------ init -----
+menu()
 readFile()
-find_room('[0,1]')
+find_room(lastroom)
+
 
 while death == False:
     console()
