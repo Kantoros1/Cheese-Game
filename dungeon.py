@@ -124,7 +124,7 @@ def console(): # Main class
     if len(inp) != 2: # Check inst length
         if inp[0] == 'cheese':
             print('- cheese')
-            for i in open('cheese.txt').readlines(): print(i,end-'')
+            for i in open('cheese.txt').readlines(): print(i,end='')
             
 
         elif inp[0] == 'help':
@@ -175,7 +175,7 @@ def console(): # Main class
                         if "key" in playerInv:
                             map_pointer = find_room(item[3])
                             playerInv.remove("key")
-                            print("- Door = unlocked\n- Key = broke lmao")
+                            print("- You had to use one of you keys to unlock the door. it broky now")
                         else:
                             print("- Bich you ain' got no damn key in this hoe")
                 else:
