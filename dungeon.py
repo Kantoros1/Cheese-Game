@@ -1,11 +1,4 @@
 from random import randint
-
-def printC(var=''):
-    global cheese_mode
-    if cheese_mode == False:
-        print(var)
-    else:
-        print('- cheese')
         
 ## --------     Combat       ---------
 
@@ -22,7 +15,7 @@ def monster_attack(): #Monster attack start
     for monster in monsters:
         status = attack("player", monster)
         if status == "death":
-            printC("! You Died.")
+            print("! You Died.")
             death = True
 
 def attack(victim, attacker): #Damage being dealt
@@ -39,7 +32,7 @@ def attack(victim, attacker): #Damage being dealt
 
     evasion = evade(victim_position)
     if evasion == "no damage":
-        printC("- " + victim + " evaded the attack, so no damage was dealt.")
+        print("! " + victim + " evaded the attack, so no damage was dealt.")
         return "alive"
 
     damage = round(float(monster_stats[attacker_position][1]) - float(monster_stats[attacker_position][1]) * (float(monster_stats[victim_position][3]) / 100),2)
@@ -48,11 +41,11 @@ def attack(victim, attacker): #Damage being dealt
     if remaining < 0:
         remaining = 0
 
-    printC("- " + attacker + " attacked " + victim + " and dealt " + str(round(damage,1)) + " damage, " + str(round(remaining,1)) + " remaining.")
+    print("! " + attacker + " attacked " + victim + " and dealt " + str(round(damage,1)) + " damage, " + str(round(remaining,1)) + " remaining.")
     
     if int(monster_stats[victim_position][2]) <= 0: #control whether the victim died
         monster_stats.pop(victim_position)
-        printC("- The "+ victim +" died!")
+        print("! The "+ victim +" died!")
         return "death"
     else:
         return "alive"
@@ -66,19 +59,40 @@ def evade(victim_position): #Did the victim evade?
 
 ## -------- Input / Room read ---------
 
-def grabItem(room,item):
-    global playerInv, world_map
-    playerInv.append(item[0])
+def grabItem(item):
+    global playerInv, world_map, map_pointer
+    
+    for thing in playerInv: # Check if same item not already in inventory. if yes, drop
+        if item[4] == thing[4] and item[4].lower() != 'none':
+            print(f'- can\'t hold more than one {item[4]} at once')
+            dropItem(thing)
+            
+    playerInv.append([item[0],*[int(i) for i in item[3][1:-1].split(',')], item[4]]) # Add item to inventory
     for i in world_map[map_pointer]: # Find item in world map, and delete
         if i[0] == item[0]:
             world_map[map_pointer].remove(i)
-    printC('- grabbed {}'.format(item[0]))
-    stats = item[3][1:-1].split(',')
+    print('- grabbed {}'.format(item[0]))
+    
+    stats = item[3][1:-1].split(',') # Print which stats increased/decreased
     for i, st in enumerate(zip(stats,['attack','health','evade'])):
         if int(st[0]) != 0:
             dire = 'increased' if int(st[0]) > 0 else 'decreased'
-            print('- Player\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1]))
+            print('! Player\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1]))
             monster_stats[0][i+1] += int(st[0])
+
+def dropItem(item):
+    global playerInv, world_map, map_pointer
+    playerInv.remove(item) # Remove item from inventoy
+    print('- dropped '+item[0])
+    world_map[map_pointer].append([item[0],'Dropped by player','grabable',f'[{item[1]},{item[2]},{item[3]}]',item[4]]) # Add item back to map
+    
+    for i, st in enumerate(zip(item[1:],['attack','health','evade'])): # Print which stats increased/decreased
+        if int(st[0]) != 0:
+            dire = 'increased' if int(st[0]) < 0 else 'decreased'
+            print('! Player\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1]))
+            monster_stats[0][i+1] -= int(st[0])
+            
+    
 
 def attackJ(monster): # For jirka
     combat('Utok',monster)
@@ -96,14 +110,13 @@ def readFile(): # reads the map file and translates into 3D list
             
             world_map.append(room)
 
-        #printC(world_map)
+        #print(world_map)
 
 def find_room(pointer): # Searches all rooms until it finds the same index, returns position in 3D list
         i = 0
         for room in world_map: 
-            
             if room[0][2] == pointer:
-                printC('- ' + room[0][1])
+                print('- ' + room[0][1])
                 return i
             i += 1        
 
@@ -120,52 +133,67 @@ def console(): # Main class
         if item[2] == 'enemy':
             monster_stats.append([item[0],*[int(i) for i in item[3][1:-1].split(',')]]) # Every time i use * i want to stop coding and go live in the woods alone
             monsters.append(item[0])
-            printC('! ' + item[1])
-            printC('- Enemy\'s attack: {0}, Enemy\'s health: {1}, Enemy\'s armor: {2}'.format(monster_stats[-1][1], monster_stats[-1][2],monster_stats[-1][3]))
+            print('! ' + item[1])
+            print('* Enemy\'s attack: {0}, Enemy\'s health: {1}, Enemy\'s armor: {2}'.format(monster_stats[-1][1], monster_stats[-1][2],monster_stats[-1][3]))
 
-            del world_map[map_pointer][x]          
+            del world_map[map_pointer][x]
+            x -= 1
 
     print('> ',end='')
     inp = input().lower().split() # Basic pre-processing
 
     if len(inp) != 2: # Check inst length
         if inp[0] == 'cheese':
-            printC('- cheese')
-            cheese_mode = ~cheese_mode
+            print('- cheese')
+            try:
+                for i in open('cheese.txt').readlines(): print(i,end='')
+            except:
+                print('- chesse')
 
         elif inp[0] == 'help':
-            print('- possible commands:\n- help\n- examine [object]\n- grab [object]\n- attack [monster]\n- move [door]\n- cheese')
+            print('* possible commands:\n- help\n- examine [object]\n- grab [object]\n- drop[object]\n- attack [monster]\n- move [door]\n- cheese')
         else:
-            printC('? I\'m not sure what you want')
+            print('? I\'m not sure what you want')
         
     elif inp[0] == 'examine': # Examine command
         if inp[1] == 'room': # If specified, will list all items in room
-            printC('- The room contains:')
+            print('- The room contains:')
             for i in room[:-1]:
-                printC('- ' + i)
-        else: # printCs description of item
+                print('* ' + i)
+
+        elif inp[1] == 'self':
+            print('* You have {0} attack and {1} health'.format(*monster_stats[0][1:3]))
+        else: # prints description of item
             for item in roomInx: # looks through all items until it finds the right one
                 if item[0] == inp[1]:
-                    printC(item[1])
+                    print(item[1])
             if inp[1] in monsters:
                 inx = 5* (monsters.index(inp[1]) + 1)
-                print('- This {0} has {1} attack and {2} health'.format(*monster_stats[inx:inx+3]))
+                print('* This {0} has {1} attack and {2} health'.format(*monster_stats[inx:inx+3]))
 
     elif inp[0] == 'grab': # Grab command
         if inp[1] == 'everything': # If specified, will attempt to grab everything
             for item in roomInx:
                 if item[2] == 'grabable':
-                    grabItem(map_pointer,item)
+                    grabItem(item)
         else: # Grab specified item, if possible
             x = 0
             for item in roomInx:
                 if item[0] == inp[1]:
                     if item[2] == 'grabable':
-                        grabItem(map_pointer,item)
+                        grabItem(item)
                     else:
-                        printC('! Cant grab {}'.format(item[0]))
+                        print('? Cant grab {}'.format(item[0]))
                 x += 1
-            
+                
+    elif inp[0] == 'drop':
+        for item in playerInv:
+            if item[0] == inp[1]:
+                dropItem(item)
+                break
+        else:
+            print('? No such item in inventory')
+                
 
     elif inp[0] in ['attack',"brutalize"]:
         if inp[1] in monsters:
@@ -178,17 +206,22 @@ def console(): # Main class
                     if item[4] == "unlocked":
                         map_pointer = find_room(item[3])
                     else:
-                        if "key" in playerInv:
-                            map_pointer = find_room(item[3])
-                            playerInv.remove("key")
-                            print("- Door = unlocked\n- Key = broke lmao")
+                        for thing in playerInv:
+                            if thing[0] == 'key':
+                                
+                                map_pointer = find_room(item[3])
+                                for thing in playerInv:
+                                    if thing[0] == 'key':
+                                        playerInv.remove(thing)
+                                        print("- Door = unlocked\n- Key = broke lmao")
+                                break
                         else:
-                            print("- Bich you ain' got no damn key in this hoe")
+                            print("? Bich you ain' got no damn key in this hoe")
                 else:
-                    print("- This ain' no damn door, fool")
+                    print("? This ain' no damn door, fool")
 
     else:
-        printC('? Sorry, i dont know what you want')
+        print('? Sorry, i dont know what you want')
 
     monster_attack()
 
@@ -204,7 +237,6 @@ map_pointer = 0
 monsters = []
 monster_stats = [['player',3,15,2,10]]
 playerInv = []
-cheese_mode = False
 
 # ------ init -----
 readFile()
