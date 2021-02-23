@@ -11,3 +11,4 @@ character classes - Yea
 room gerneerat - workin on it
 storoy - haha its cheese
 
+The main .py says its version 0.7 but that's mislabeled, were on 0.6.1 i just dont know how to change it
