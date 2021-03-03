@@ -6,9 +6,9 @@ Our group's program - a shitty text game.
 
 things to do:
 larger map - Later
-optimiz (very low priority) - Huh
-character classes - Yea
+optimiz (very low priority) - Huh ||
+character classes - jirka branh
 room gerneerat - workin on it
 storoy - haha its cheese
 
-The main .py says its version 0.7 but that's mislabeled, were on 0.6.1 i just dont know how to change it
+honsetly not sure what more we could add that wouldnt be either sueless or super harsd, which is tgood o guwess.
