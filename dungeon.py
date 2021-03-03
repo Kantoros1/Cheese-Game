@@ -1,5 +1,11 @@
 from random import randint
-        
+
+# - Info
+# > Input
+# ! Important game info
+# ? Invalid input/error
+# * List
+
 ## --------     Combat       ---------
 
 def combat(action,choicenum1): #Player attack start
@@ -91,11 +97,6 @@ def dropItem(item):
             dire = 'increased' if int(st[0]) < 0 else 'decreased'
             print('! Player\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1]))
             monster_stats[0][i+1] -= int(st[0])
-            
-    
-
-def attackJ(monster): # For jirka
-    combat('Utok',monster)
     
 def readFile(): # reads the map file and translates into 3D list
     global world_map, map_pointer
@@ -142,86 +143,89 @@ def console(): # Main class
     print('> ',end='')
     inp = input().lower().split() # Basic pre-processing
 
-    if len(inp) != 2: # Check inst length
-        if inp[0] == 'cheese':
-            print('- cheese')
-            try:
-                for i in open('cheese.txt').readlines(): print(i,end='')
-            except:
-                print('- chesse')
+    if inp[0] == 'cheese':
+        print('- cheese')
+        try:
+            for i in open('cheese.txt').readlines(): print(i,end='')
+        except:
+            print('- chesse')
 
-        elif inp[0] == 'help':
-            print('* possible commands:\n- help\n- examine [object]\n- grab [object]\n- drop[object]\n- attack [monster]\n- move [door]\n- cheese')
-        else:
-            print('? I\'m not sure what you want')
+    elif inp[0] in ['help','what']:
+        print('- possible commands:\n* help\n* examine [object]\n* grab [object]\n* drop[object]\n* attack [monster]\n* move [door]\n* cheese')
         
-    elif inp[0] == 'examine': # Examine command
-        if inp[1] == 'room': # If specified, will list all items in room
+    elif inp[0] in ['examine','look']: # Examine command
+        if inp[1] in ['room','all','everything']: # If specified, will list all items in room
             print('- The room contains:')
             for i in room[:-1]:
                 print('* ' + i)
 
-        elif inp[1] == 'self':
+        elif inp[1] in ['self','me','myself']:
             print('* You have {0} attack and {1} health'.format(*monster_stats[0][1:3]))
         else: # prints description of item
             for item in roomInx: # looks through all items until it finds the right one
                 if item[0] == inp[1]:
-                    print(item[1])
+                    print('- ' + item[1])
+                    break
+            else:
+                print('? There is no object like that visible')
+                
             if inp[1] in monsters:
                 inx = 5* (monsters.index(inp[1]) + 1)
                 print('* This {0} has {1} attack and {2} health'.format(*monster_stats[inx:inx+3]))
 
-    elif inp[0] == 'grab': # Grab command
+    elif inp[0] in ['grab','take']: # Grab command
         if inp[1] == 'everything': # If specified, will attempt to grab everything
             for item in roomInx:
                 if item[2] == 'grabable':
                     grabItem(item)
+
         else: # Grab specified item, if possible
-            x = 0
             for item in roomInx:
                 if item[0] == inp[1]:
                     if item[2] == 'grabable':
                         grabItem(item)
                     else:
                         print('? Cant grab {}'.format(item[0]))
-                x += 1
+                break
+            else:
+                print('? There is no object like that')
                 
-    elif inp[0] == 'drop':
+    elif inp[0] in ['drop','leave']:
         for item in playerInv:
             if item[0] == inp[1]:
                 dropItem(item)
                 break
         else:
             print('? No such item in inventory')
-                
 
     elif inp[0] in ['attack',"brutalize"]:
         if inp[1] in monsters:
-            attackJ(inp[1])
+            combat('Utok',inp[1])
+        else:
+            print('? You can\'t attack that right now')
 
-    elif inp[0] == 'move': # TODO:// Check if door is open. also: implement closed doors
-        for item in roomInx:
+    elif inp[0] in ['move','open']: # TODO:// Check if door is open. also: implement closed doors
+        for i, item in enumerate(roomInx):
             if item[0] == inp[1]:
                 if item[2] == "door":
                     if item[4] == "unlocked":
                         map_pointer = find_room(item[3])
                     else:
-                        for thing in playerInv:
+                        for thing in playerInv: # Check if player even has a key
                             if thing[0] == 'key':
-                                
-                                map_pointer = find_room(item[3])
-                                for thing in playerInv:
-                                    if thing[0] == 'key':
-                                        playerInv.remove(thing)
-                                        print("- Door = unlocked\n- Key = broke lmao")
+
+                                world_map[map_pointer][i][4] = 'unlocked' # Unlock door in world_map for later
+                                map_pointer = find_room(item[3]) # Change room
+                                playerInv.remove(thing) # Remove key from inventory
+                                print("- The door has been unlocked, but your key got stuck in the lock")
                                 break
                         else:
-                            print("? Bich you ain' got no damn key in this hoe")
+                            print("? You need a key to open this door")
                 else:
-                    print("? This ain' no damn door, fool")
+                    print("? You can't go through this object")
 
     else:
-        print('? Sorry, i dont know what you want')
+        print('? You cant do that right now')
 
     monster_attack()
 
