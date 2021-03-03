@@ -13,27 +13,28 @@ def save():
     name = input("Name your savefile")
     saves.write(name + " ")
     saves.close()
-    save = open(name +".txt", "w")
+
+    
+    save = open(name + ".txt", "w")
+    for i in world_map:
+        save.write("#")
+        for n in i:
+            save.write("\n")
+            for z in n:
+                save.write(z)
+                if z != n[-1]:
+                    save.write(";")
+        save.write("\n")
+
+    save.write("$")
     save.write(str(monster_stats) + "\n")
     save.write(str(player_health) + "\n")
     save.write(str(monsters) + "\n")
     save.write(str(playerInv) + "\n")
     save.write(str(map_pointer) + "\n")
     save.write(str(lastroom))
+
     save.close()
-
-    map_save = open("map_" + name + ".txt", "w")
-    for i in world_map:
-        map_save.write("#")
-        for n in i:
-            map_save.write("\n")
-            for z in n:
-                map_save.write(z)
-                if z != n[-1]:
-                    map_save.write(";")
-        map_save.write("\n")
-
-    map_save.close()
 
 def load():
     global monster_stats, player_health, monsters, playerInv, map_pointer, lastroom, name_map
@@ -47,7 +48,9 @@ def load():
     load = open(name + ".txt", "r")
     info = load.read()
     load.close()
-    info_detail = info.split("\n")
+    info_detail = info.split("$")
+    del info_detail[0]
+    info_detail = info_detail[0].split("\n")
 
     for i in info_detail[:-1]:
         info_detail[x] = info_detail[x].replace("]","")
@@ -82,7 +85,7 @@ def load():
     
     lastroom = info_detail[5]
 
-    name_map = ("map_" + name + ".txt")
+    name_map = (name + ".txt")
 
     
 ## --------     Combat       ---------
