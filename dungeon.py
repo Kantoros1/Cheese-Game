@@ -1,4 +1,5 @@
 from random import randint
+import os # For file creation
 
 # - Info
 # > Input
@@ -6,13 +7,16 @@ from random import randint
 # ? Invalid input/error
 # * List
 
+# ----------- saves --------
+
 def save():
-    saves = open("save.txt", "a")
-    name = input("Name your savefile")
+    saves = open("saves/save_directory.txt", "a")
+    name = input("- Name your savefile:\n> ").replace(' ','_')
+    print('- You can now keep playing, or exit the game(end): ')
     saves.write(name + " ")
     saves.close()
     
-    save = open(name + ".txt", "w")
+    save = open("saves/" + name + ".txt", "w")
     for i in world_map:
         save.write("#")
         for n in i:
@@ -33,16 +37,12 @@ def save():
 
     save.close()
 
-def load():
+def load(name):
     global monster_stats, player_health, monsters, playerInv, map_pointer, lastroom, name_map
     x = 0
     y = 0
     monster_stats = [[]]
-    listofsa = open("save.txt", "r")
-    print(listofsa.read())
-    listofsa.close()
-    name = input("Which savefile do you want to load?")
-    load = open(name + ".txt", "r")
+    load = open("saves/" + name + ".txt", "r")
     info = load.read()
     load.close()
     info_detail = info.split("$")
@@ -81,7 +81,7 @@ def load():
     
     lastroom = info_detail[5]
 
-    name_map = (name + ".txt")
+    name_map = ('saves/' + name + ".txt")
 
     
 ## --------     Combat       ---------
@@ -143,31 +143,49 @@ def evade(victim_position): #Did the victim evade?
 
 ##-------------- Menu -------------
 
-def menu():
-    global monster_stats, player_health, death
+def menu(): # Saving, loading savefiles, introduction
+    global monster_stats, player_health, death, classes
 
-    choice = input("New game, load, end")
-    choice = choice.lower()
+    print('- Welcome to the official CheeseGame social experiment!')
+    print('- Please take frequent breaks to reduce risk of bad syndrome')
 
-    if choice == "end":
-        death = True
-    elif choice == "load":
-        load()
-    elif choice == "new game":
-        mon = open("player.txt", "r")
-        text = mon.read()
-        classes = text.replace("\n", "")
-        classes = classes.split(";")
-        print("Tank, rogue, regular")
-        x = 0
-        choice2 = input("Choose class")
+    if not os.path.exists('saves'): # Creates file if it doesn't exist yet
+        os.makedirs('saves')
+    open("saves/save_directory.txt",'a+') # Creates directory if it doesn't exist yet
     
-        for i in classes:
-            if i == choice2:
-                monster_stats.append([classes[x+1],*[int(i) for i in classes[x+2][1:-1].split(',')]])
-                print(monster_stats)
-            x += 1
-        player_health = monster_stats[0][2]
+    dire = open("saves/save_directory.txt").read().split() # Game saves separated by single space
+
+    if len(dire) == 0: # Count available saves, if 0, start new game automatically
+        print("- No saves available, creating new game")
+        new_game()
+    else:
+        print('- Saved games:')
+        for i in dire:
+            print('* ' + i)
+        choice = input("- Select game, or create a new one(new):\n> ").lower()
+        if choice in ['new','']:
+            new_game()
+        elif choice in dire:
+            load(choice)
+        else:
+            print("! That save isn't available, starting new game")
+            new_game()
+            
+def new_game():
+    global monster_stats, player_health, death, classes
+    
+    print('- Available classes: ') # Print all classes
+    for i in classes:
+        print('* ' + i)
+        
+    choice = input('Select your player class:\n> ')
+    
+    if choice not in classes:
+        choice = 'regular' # Default to regular class
+        
+    monster_stats.append(classes[choice]) # Create player stats
+
+    player_health = monster_stats[0][2] # Set max health
 
 def grabItem(item):
     global playerInv, world_map, map_pointer
@@ -250,7 +268,10 @@ def console(): # Main class
     print('> ',end='')
     inp = input().lower().split() # Basic pre-processing
 
-    if inp[0] == 'cheese':
+    if len(inp) == 0:
+        print('- You do nothing...')
+
+    elif inp[0] == 'cheese':
         print('- cheese')
         try:
             for i in open('cheese.txt').readlines(): print(i,end='')
@@ -298,7 +319,7 @@ def console(): # Main class
                         grabItem(item)
                     else:
                         print('? Cant grab {}'.format(item[0]))
-                break
+                    break
             else:
                 print('? There is no object like that')
                 
@@ -327,10 +348,10 @@ def console(): # Main class
                         for thing in playerInv: # Check if player even has a key
                             if thing[0] == 'key':
                                 print("- The door has been unlocked, but your key got stuck in the lock")
+                                world_map[map_pointer][i][4] = 'unlocked' # Unlock door in world_map for later
                                 map_pointer = find_room(item[3]) # Change room
                                 lastroom = item[3]
                                 playerInv.remove(thing)
-                                world_map[map_pointer][i][4] = 'unlocked' # Unlock door in world_map for later
                             break
 
                         else:
@@ -348,7 +369,7 @@ def console(): # Main class
     
 # --------- Global variables ---------
 
-player_health = 10
+player_health = 10 # Health limit, not current value
 death = False
 name_map = 'map.txt' # Map file
 lastroom = '[0,1]' # Coordinates of last room in [x,y]
@@ -357,12 +378,12 @@ map_pointer = 0 # Index of current room in world_map
 monsters = [] # Monsters currently attacking. 2D list // CONFLICT
 monster_stats = [] # Monsters currently attacking with stats // CONFLICT
 playerInv = [] # Player inventory with stats. 2D list
+classes = {'regular':['player',3,10,12,5],'tank':['player',2,15,10,2],'rogue':['player',4,7,15,10]}
 
 # ------ init -----
 menu()
 readFile()
 find_room(lastroom)
-
 
 while death == False:
     console()
