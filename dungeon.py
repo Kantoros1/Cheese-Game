@@ -73,14 +73,22 @@ def load(name):
     monsters = info_detail2
 
     info_detail2 = info_detail[3].split(", ")
-    if info_detail2[0] == "":
-        info_detail2.pop()
-    playerInv = info_detail2
+    y = 0
+    
+    for i in info_detail2:
+        if y == 5:
+            x +=1
+            y = 0
+            playerInv.append([])
+        playerInv[x].append(i)
+        y+=1
+
    
     map_pointer = int(info_detail[4])
     
     lastroom = info_detail[5]
 
+    print(playerInv)
     name_map = ('saves/' + name + ".txt")
 
     
@@ -377,7 +385,7 @@ world_map = [] # Entire game map as a 3D list
 map_pointer = 0 # Index of current room in world_map
 monsters = [] # Monsters currently attacking. 2D list // CONFLICT
 monster_stats = [] # Monsters currently attacking with stats // CONFLICT
-playerInv = [] # Player inventory with stats. 2D list
+playerInv = [[]] # Player inventory with stats. 2D list
 classes = {'regular':['player',3,10,12,5],'tank':['player',2,15,10,2],'rogue':['player',4,7,15,10]}
 
 # ------ init -----
