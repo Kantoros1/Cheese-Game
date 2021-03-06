@@ -1,5 +1,5 @@
 from random import randint
-from itertools import chain # For easier convertion of lists
+from itertools import chain
 import os # For file creation
 
 # - Info
@@ -84,7 +84,6 @@ def load(name):
     
     lastroom = info_detail[4]
 
-    print(playerInv)
     name_map = ('saves/' + name + ".txt")
 
     
@@ -93,50 +92,32 @@ def load(name):
 def monster_attack(): #Monster attack start
     for monster in monster_stats[1:]:
         monster = monster[0]
-        status = attack(monster_stats[0][0], monster)
+        inx = int(list(chain.from_iterable(monster_stats)).index(monster) / 5)
+        status = attack(monster_stats[0][0], monster, inx, 0)
         if status == "death":
             print("! You Died.")
             death = True
             return
         
-def attack(victim, attacker): #Damage being dealt
-    victim_position = 0
-    attacker_position = 0
+def attack(victim, attacker, attacker_position, victim_position): #Damage being dealt
     
-    x = 0
-    for i in monster_stats: #finding the position of the victim and the attacker
-        if i[0] == victim:
-            victim_position = x
-        if i[0] == attacker:
-            attacker_position = x
-        x = x + 1 
-
-    evasion = evade(victim_position)
-    if evasion == "no damage":
+    evade = randint(1,100)
+    if evade <= int(monster_stats[victim_position][4]):
         print("! " + victim + " evaded the attack, so no damage was dealt.")
-        return "alive"
+        return 
 
-    damage = round(float(monster_stats[attacker_position][1]) - float(monster_stats[attacker_position][1]) * (float(monster_stats[victim_position][3]) / 100),2)
+    damage = round(float(monster_stats[attacker_position][1]) - float(monster_stats[attacker_position][1]) * (float(monster_stats[victim_position][3]) / 100),1)
     monster_stats[victim_position][2] = float(monster_stats[victim_position][2]) - damage
-    remaining = monster_stats[victim_position][2]
-    if remaining < 0:
-        remaining = 0
+    if monster_stats[victim_position][2] < 0:
+        monster_stats[victim_position][2] = 0
 
-    print("! " + attacker + " attacked " + victim + " and dealt " + str(round(damage,1)) + " damage, " + str(round(remaining,1)) + " remaining.")
+    print("! " + attacker + " attacked " + victim + " and dealt " + str(damage) + " damage, " + str(monster_stats[victim_position][2]) + " remaining.")
     
-    if remaining == float(0): #control whether the victim died
+    if monster_stats[victim_position][2] == 0: #control whether the victim died
         monster_stats.pop(victim_position)
         print("! The "+ victim +" died!")
         return "death"
-    else:
-        return "alive"
 
-def evade(victim_position): #Did the victim evade?
-    evade = randint(1,100)
-    if evade <= int(monster_stats[victim_position][4]):
-        return "no damage"
-    else:
-        return "damage"
 
 ##-------------- Menu -------------
 
@@ -330,7 +311,8 @@ def console(): # Main class
 
     elif inp[0] in ['attack',"brutalize"]:
         if inp[1] in list(chain.from_iterable(monster_stats)):
-            attack(inp[1],monster_stats[0][0])
+            inx = int(list(chain.from_iterable(monster_stats)).index(inp[1]) / 5)
+            attack(inp[1],monster_stats[0][0], 0, inx)
         else:
             print('? You can\'t attack that right now')
 
