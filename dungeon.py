@@ -49,8 +49,7 @@ def load():
     info = load.read()
     load.close()
     info_detail = info.split("$")
-    del info_detail[0]
-    info_detail = info_detail[0].split("\n")
+    info_detail = info_detail[1].split("\n")
 
     for i in info_detail[:-1]:
         info_detail[x] = info_detail[x].replace("]","")
@@ -188,7 +187,8 @@ def grabItem(room,item):
             dire = 'increased' if int(st[0]) > 0 else 'decreased'
             print('- Player\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1]))
             monster_stats[0][i+1] += int(st[0])
-
+    print(monster_stats)
+    
 def attackJ(monster):
     combat('Utok',monster)
     
@@ -208,14 +208,14 @@ def readFile(): # reads the map file and translates into 3D list
         #printC(world_map)
 
 def find_room(pointer): # Searches all rooms until it finds the same index, returns position in 3D list
+        global death
         i = 0
         for room in world_map: 
-            
-            if room[0][2] == pointer:
+            if death == False and room[0][2] == pointer:
                 printC('- ' + room[0][1])
                 return i
-            i += 1        
-
+            i += 1
+        return
 def console(): # Main class
     global world_map, map_pointer, player_health, cheese_mode, death, lastroom
     roomInx = world_map[map_pointer] # Copy room into buffer RoomInx
@@ -247,6 +247,7 @@ def console(): # Main class
             print('- possible commands:\n- help\n- examine [object]\n- grab [object]\n- attack [monster]\n- move [door]\n- cheese')
         elif inp[0] == 'end':
             death = True
+            return
         elif inp[0] == 'save':
             save()
         else:
@@ -326,9 +327,8 @@ cheese_mode = False
 
 # ------ init -----
 menu()
-if death == False:
-    readFile()
-    find_room(lastroom)
+readFile()
+find_room(lastroom)
 
 
 while death == False:
