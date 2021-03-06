@@ -39,6 +39,7 @@ def save():
 
 def load(name):
     global monster_stats, player_health, monsters, playerInv, map_pointer, lastroom, name_map
+    playerInv = [[]]
     x = 0
     y = 0
     monster_stats = [[]]
@@ -229,6 +230,7 @@ def dropItem(item):
         if int(st[0]) != 0:
             dire = 'increased' if int(st[0]) < 0 else 'decreased'
             print('! Player\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1]))
+            monster_stats[0][i+1] = int(monster_stats[0][i+1])
             monster_stats[0][i+1] -= int(st[0])
     
 def readFile(): # reads the map file and translates into 3D list
@@ -385,7 +387,7 @@ world_map = [] # Entire game map as a 3D list
 map_pointer = 0 # Index of current room in world_map
 monsters = [] # Monsters currently attacking. 2D list // CONFLICT
 monster_stats = [] # Monsters currently attacking with stats // CONFLICT
-playerInv = [[]] # Player inventory with stats. 2D list
+playerInv = [] # Player inventory with stats. 2D list
 classes = {'regular':['player',3,10,12,5],'tank':['player',2,15,10,2],'rogue':['player',4,7,15,10]}
 
 # ------ init -----
