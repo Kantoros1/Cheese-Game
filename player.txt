@@ -1,3 +1,0 @@
-tank;[player,2,15,10,2]
-rogue;[player,4,7,15,10]
-regular;[player,3,10,12,5]
