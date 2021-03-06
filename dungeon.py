@@ -6,6 +6,84 @@ from random import randint
 # ? Invalid input/error
 # * List
 
+def save():
+    saves = open("save.txt", "a")
+    name = input("Name your savefile")
+    saves.write(name + " ")
+    saves.close()
+    
+    save = open(name + ".txt", "w")
+    for i in world_map:
+        save.write("#")
+        for n in i:
+            save.write("\n")
+            for z in n:
+                save.write(z)
+                if z != n[-1]:
+                    save.write(";")
+        save.write("\n")
+
+    save.write("$")
+    save.write(str(monster_stats) + "\n")
+    save.write(str(player_health) + "\n")
+    save.write(str(monsters) + "\n")
+    save.write(str(playerInv) + "\n")
+    save.write(str(map_pointer) + "\n")
+    save.write(str(lastroom))
+
+    save.close()
+
+def load():
+    global monster_stats, player_health, monsters, playerInv, map_pointer, lastroom, name_map
+    x = 0
+    y = 0
+    monster_stats = [[]]
+    listofsa = open("save.txt", "r")
+    print(listofsa.read())
+    listofsa.close()
+    name = input("Which savefile do you want to load?")
+    load = open(name + ".txt", "r")
+    info = load.read()
+    load.close()
+    info_detail = info.split("$")
+    info_detail = info_detail[1].split("\n")
+
+    for i in info_detail[:-1]:
+        info_detail[x] = info_detail[x].replace("]","")
+        info_detail[x] = info_detail[x].replace("[","")
+        info_detail[x] = info_detail[x].replace("'","")
+        x += 1
+    x = 0
+
+    info_detail2 = info_detail[0].split(", ")
+    
+    for i in info_detail2:
+        if y == 5:
+            x +=1
+            y = 0
+            monster_stats.append([])
+        monster_stats[x].append(i)
+        y+=1
+    
+    player_health = int(info_detail[1])
+    
+    info_detail2 = info_detail[2].split(", ")
+    if info_detail2[0] == "":
+        info_detail2.pop()
+    monsters = info_detail2
+
+    info_detail2 = info_detail[3].split(", ")
+    if info_detail2[0] == "":
+        info_detail2.pop()
+    playerInv = info_detail2
+   
+    map_pointer = int(info_detail[4])
+    
+    lastroom = info_detail[5]
+
+    name_map = (name + ".txt")
+
+    
 ## --------     Combat       ---------
 
 def combat(action,choicenum1): #Player attack start
@@ -49,7 +127,7 @@ def attack(victim, attacker): #Damage being dealt
 
     print("! " + attacker + " attacked " + victim + " and dealt " + str(round(damage,1)) + " damage, " + str(round(remaining,1)) + " remaining.")
     
-    if int(monster_stats[victim_position][2]) <= 0: #control whether the victim died
+    if remaining == float(0): #control whether the victim died
         monster_stats.pop(victim_position)
         print("! The "+ victim +" died!")
         return "death"
@@ -63,7 +141,33 @@ def evade(victim_position): #Did the victim evade?
     else:
         return "damage"
 
-## -------- Input / Room read ---------
+##-------------- Menu -------------
+
+def menu():
+    global monster_stats, player_health, death
+
+    choice = input("New game, load, end")
+    choice = choice.lower()
+
+    if choice == "end":
+        death = True
+    elif choice == "load":
+        load()
+    elif choice == "new game":
+        mon = open("player.txt", "r")
+        text = mon.read()
+        classes = text.replace("\n", "")
+        classes = classes.split(";")
+        print("Tank, rogue, regular")
+        x = 0
+        choice2 = input("Choose class")
+    
+        for i in classes:
+            if i == choice2:
+                monster_stats.append([classes[x+1],*[int(i) for i in classes[x+2][1:-1].split(',')]])
+                print(monster_stats)
+            x += 1
+        player_health = monster_stats[0][2]
 
 def grabItem(item):
     global playerInv, world_map, map_pointer
@@ -74,6 +178,7 @@ def grabItem(item):
             dropItem(thing)
             
     playerInv.append([item[0],*[int(i) for i in item[3][1:-1].split(',')], item[4]]) # Add item to inventory
+    
     for i in world_map[map_pointer]: # Find item in world map, and delete
         if i[0] == item[0]:
             world_map[map_pointer].remove(i)
@@ -85,6 +190,8 @@ def grabItem(item):
             dire = 'increased' if int(st[0]) > 0 else 'decreased'
             print('! Player\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1]))
             monster_stats[0][i+1] += int(st[0])
+
+    #print(monster_stats)
 
 def dropItem(item):
     global playerInv, world_map, map_pointer
@@ -100,7 +207,7 @@ def dropItem(item):
     
 def readFile(): # reads the map file and translates into 3D list
     global world_map, map_pointer
-    with open('map.txt') as F:
+    with open(name_map) as F:
         
         world_map = []
         
@@ -114,31 +221,31 @@ def readFile(): # reads the map file and translates into 3D list
         #print(world_map)
 
 def find_room(pointer): # Searches all rooms until it finds the same index, returns position in 3D list
+        global death
         i = 0
         for room in world_map: 
             if room[0][2] == pointer:
                 print('- ' + room[0][1])
-                return i
-            i += 1        
 
+                return i
+            i += 1
+        return
 def console(): # Main class
-    global world_map, map_pointer, player_health, cheese_mode
+    global world_map, map_pointer, player_health, cheese_mode, death, lastroom
     roomInx = world_map[map_pointer] # Copy room into buffer RoomInx
     room = [*[x[0] for x in roomInx][1:],'room'] # Creates a list of thing in the room
 
     # Create monster
-
-    x = 0
+    x = 0 # Current index
     for item in roomInx[1:]:
-        x += 1
-        if item[2] == 'enemy':
+        x += 1 
+        if item[2] == 'enemy': # Test type
             monster_stats.append([item[0],*[int(i) for i in item[3][1:-1].split(',')]]) # Every time i use * i want to stop coding and go live in the woods alone
-            monsters.append(item[0])
+            monsters.append(item[0]) # Move monster to special monster list
             print('! ' + item[1])
-            print('* Enemy\'s attack: {0}, Enemy\'s health: {1}, Enemy\'s armor: {2}'.format(monster_stats[-1][1], monster_stats[-1][2],monster_stats[-1][3]))
-
-            del world_map[map_pointer][x]
-            x -= 1
+            print('- {3}\'s attack: {0}, {3}\'s health: {1}, {3}\'s armor: {2}'.format(monster_stats[-1][1], monster_stats[-1][2],monster_stats[-1][3],monster_stats[-1][0]))
+            del world_map[map_pointer][x] # Delete monster from map
+            x -= 1 # Compensate for deleted monster
 
     print('> ',end='')
     inp = input().lower().split() # Basic pre-processing
@@ -150,8 +257,13 @@ def console(): # Main class
         except:
             print('- chesse')
 
-    elif inp[0] in ['help','what']:
-        print('- possible commands:\n* help\n* examine [object]\n* grab [object]\n* drop[object]\n* attack [monster]\n* move [door]\n* cheese')
+    elif inp[0] == 'help':
+            print('- possible commands:\n* help\n* examine [object]\n* grab [object]\n* drop[object]\n* attack [monster]\n* move [door]\n* cheese')
+    elif inp[0] == 'end':
+            death = True
+            return
+    elif inp[0] == 'save':
+            save()
         
     elif inp[0] in ['examine','look']: # Examine command
         if inp[1] in ['room','all','everything']: # If specified, will list all items in room
@@ -210,15 +322,17 @@ def console(): # Main class
                 if item[2] == "door":
                     if item[4] == "unlocked":
                         map_pointer = find_room(item[3])
+                        lastroom = item[3]
                     else:
                         for thing in playerInv: # Check if player even has a key
                             if thing[0] == 'key':
-
-                                world_map[map_pointer][i][4] = 'unlocked' # Unlock door in world_map for later
-                                map_pointer = find_room(item[3]) # Change room
-                                playerInv.remove(thing) # Remove key from inventory
                                 print("- The door has been unlocked, but your key got stuck in the lock")
-                                break
+                                map_pointer = find_room(item[3]) # Change room
+                                lastroom = item[3]
+                                playerInv.remove(thing)
+                                world_map[map_pointer][i][4] = 'unlocked' # Unlock door in world_map for later
+                            break
+
                         else:
                             print("? You need a key to open this door")
                 else:
@@ -234,17 +348,21 @@ def console(): # Main class
     
 # --------- Global variables ---------
 
-player_health = 15
+player_health = 10
 death = False
-world_map = []
-map_pointer = 0
-monsters = []
-monster_stats = [['player',3,15,2,10]]
-playerInv = []
+name_map = 'map.txt' # Map file
+lastroom = '[0,1]' # Coordinates of last room in [x,y]
+world_map = [] # Entire game map as a 3D list
+map_pointer = 0 # Index of current room in world_map
+monsters = [] # Monsters currently attacking. 2D list // CONFLICT
+monster_stats = [] # Monsters currently attacking with stats // CONFLICT
+playerInv = [] # Player inventory with stats. 2D list
 
 # ------ init -----
+menu()
 readFile()
-find_room('[0,1]')
+find_room(lastroom)
+
 
 while death == False:
     console()
