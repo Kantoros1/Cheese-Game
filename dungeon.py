@@ -1,4 +1,5 @@
 from random import randint
+from itertools import chain # For easier convertion of lists
 import os # For file creation
 
 # - Info
@@ -30,7 +31,6 @@ def save():
     save.write("$")
     save.write(str(monster_stats) + "\n")
     save.write(str(player_health) + "\n")
-    save.write(str(monsters) + "\n")
     save.write(str(playerInv) + "\n")
     save.write(str(map_pointer) + "\n")
     save.write(str(lastroom))
@@ -38,7 +38,7 @@ def save():
     save.close()
 
 def load(name):
-    global monster_stats, player_health, monsters, playerInv, map_pointer, lastroom, name_map
+    global monster_stats, player_health, playerInv, map_pointer, lastroom, name_map
     playerInv = [[]]
     x = 0
     y = 0
@@ -67,13 +67,8 @@ def load(name):
         y+=1
     
     player_health = int(info_detail[1])
-    
-    info_detail2 = info_detail[2].split(", ")
-    if info_detail2[0] == "":
-        info_detail2.pop()
-    monsters = info_detail2
 
-    info_detail2 = info_detail[3].split(", ")
+    info_detail2 = info_detail[2].split(", ")
     y = 0
     
     for i in info_detail2:
@@ -85,9 +80,9 @@ def load(name):
         y+=1
 
    
-    map_pointer = int(info_detail[4])
+    map_pointer = int(info_detail[3])
     
-    lastroom = info_detail[5]
+    lastroom = info_detail[4]
 
     print(playerInv)
     name_map = ('saves/' + name + ".txt")
@@ -95,22 +90,15 @@ def load(name):
     
 ## --------     Combat       ---------
 
-def combat(action,choicenum1): #Player attack start
-    global monster_stats
-    
-    if action == "Utok":
-        status = attack(choicenum1,"player")
-        if status == "death":
-            monsters.remove(choicenum1)
-
 def monster_attack(): #Monster attack start
-    global monsters, death
-    for monster in monsters:
-        status = attack("player", monster)
+    for monster in monster_stats[1:]:
+        monster = monster[0]
+        status = attack(monster_stats[0][0], monster)
         if status == "death":
             print("! You Died.")
             death = True
-
+            return
+        
 def attack(victim, attacker): #Damage being dealt
     victim_position = 0
     attacker_position = 0
@@ -269,7 +257,6 @@ def console(): # Main class
         x += 1 
         if item[2] == 'enemy': # Test type
             monster_stats.append([item[0],*[int(i) for i in item[3][1:-1].split(',')]]) # Every time i use * i want to stop coding and go live in the woods alone
-            monsters.append(item[0]) # Move monster to special monster list
             print('! ' + item[1])
             print('- {3}\'s attack: {0}, {3}\'s health: {1}, {3}\'s armor: {2}'.format(monster_stats[-1][1], monster_stats[-1][2],monster_stats[-1][3],monster_stats[-1][0]))
             del world_map[map_pointer][x] # Delete monster from map
@@ -304,6 +291,10 @@ def console(): # Main class
 
         elif inp[1] in ['self','me','myself']:
             print('* You have {0} attack and {1} health'.format(*monster_stats[0][1:3]))
+            
+        elif inp[1] in list(chain.from_iterable(monster_stats)):
+                inx = int(list(chain.from_iterable(monster_stats)).index(inp[1]) / 5)
+                print('* This {0} has {1} attack and {2} health'.format(*monster_stats[inx][0:3]))
         else: # prints description of item
             for item in roomInx: # looks through all items until it finds the right one
                 if item[0] == inp[1]:
@@ -311,11 +302,7 @@ def console(): # Main class
                     break
             else:
                 print('? There is no object like that visible')
-                
-            if inp[1] in monsters:
-                inx = 5* (monsters.index(inp[1]) + 1)
-                print('* This {0} has {1} attack and {2} health'.format(*monster_stats[inx:inx+3]))
-
+                            
     elif inp[0] in ['grab','take']: # Grab command
         if inp[1] == 'everything': # If specified, will attempt to grab everything
             for item in roomInx:
@@ -342,8 +329,8 @@ def console(): # Main class
             print('? No such item in inventory')
 
     elif inp[0] in ['attack',"brutalize"]:
-        if inp[1] in monsters:
-            combat('Utok',inp[1])
+        if inp[1] in list(chain.from_iterable(monster_stats)):
+            attack(inp[1],monster_stats[0][0])
         else:
             print('? You can\'t attack that right now')
 
@@ -372,10 +359,12 @@ def console(): # Main class
     else:
         print('? You cant do that right now')
 
-    monster_attack()
+
 
     if len(monster_stats) == 1:
         monster_stats[0][2] = player_health
+    else:
+        monster_attack()
     
 # --------- Global variables ---------
 
@@ -385,8 +374,7 @@ name_map = 'map.txt' # Map file
 lastroom = '[0,1]' # Coordinates of last room in [x,y]
 world_map = [] # Entire game map as a 3D list
 map_pointer = 0 # Index of current room in world_map
-monsters = [] # Monsters currently attacking. 2D list // CONFLICT
-monster_stats = [] # Monsters currently attacking with stats // CONFLICT
+monster_stats = [] # Monsters currently attacking with stats
 playerInv = [] # Player inventory with stats. 2D list
 classes = {'regular':['player',3,10,12,5],'tank':['player',2,15,10,2],'rogue':['player',4,7,15,10]}
 
