@@ -18,8 +18,8 @@ def save():
     saves.close()
     
     save = open("saves/" + name + ".txt", "w")
+    save.write("#")
     for i in world_map:
-        save.write("#")
         for n in i:
             save.write("\n")
             for z in n:
@@ -27,6 +27,7 @@ def save():
                 if z != n[-1]:
                     save.write(";")
         save.write("\n")
+        save.write("#")
 
     save.write("$")
     save.write(str(monster_stats) + "\n")
@@ -214,7 +215,8 @@ def readFile(): # reads the map file and translates into 3D list
                 room.append(lineF.split(';')[:]) # Split lines into elements
             
             world_map.append(room)
-
+            
+        world_map = world_map[:-1]
         #print(world_map)
 
 def find_room(pointer): # Searches all rooms until it finds the same index, returns position in 3D list
@@ -227,6 +229,7 @@ def find_room(pointer): # Searches all rooms until it finds the same index, retu
                 return i
             i += 1
         return
+    
 def console(): # Main class
     global world_map, map_pointer, player_health, cheese_mode, death, lastroom
     roomInx = world_map[map_pointer] # Copy room into buffer RoomInx
