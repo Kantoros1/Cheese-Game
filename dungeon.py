@@ -91,14 +91,48 @@ def load(name):
 ## --------     Combat       ---------
 
 def monster_attack(): #Monster attack start
-    for monster in monster_stats[1:]:
+    global basic_len
+    lowest = monster_stats[0][2]
+    victim = monster_stats[0][0]
+    victim_position = 0
+    x = 0
+    for companion in monster_stats[:basic_len]:
+        if companion[2] < lowest:
+            lowest = companion[2]
+            victim = companion[0]
+            victim_position = x
+        x += 1
+        
+    for monster in monster_stats[basic_len:]:
         monster = monster[0]
         inx = int(list(chain.from_iterable(monster_stats)).index(monster) / 5)
-        status = attack(monster_stats[0][0], monster, inx, 0)
-        if status == "death":
+        status = attack(victim, monster, inx, victim_position)
+        if status == "death" and victim == 'player':
             print("! You Died.")
             death = True
             return
+        elif status == "death":
+            basic_len -= 1
+        
+def companion_attack():
+    global basic_len
+    lowest = monster_stats[0][2]
+    victim = monster_stats[basic_len][0]
+    victim_position = basic_len
+    
+    x = basic_len
+    for monster in monster_stats[basic_len:]:
+        if monster[2] < lowest:
+            lowest = monster[2]
+            victim = monster[0]
+            victim_position = x
+        x += 1
+        
+    for companion in monster_stats[1:basic_len]:
+        companion = companion[0]
+        inx = int(list(chain.from_iterable(monster_stats)).index(companion) / 5)
+        status = attack(victim, companion, inx, victim_position)
+
         
 def attack(victim, attacker, attacker_position, victim_position): #Damage being dealt
     
@@ -108,7 +142,8 @@ def attack(victim, attacker, attacker_position, victim_position): #Damage being 
         return 
 
     damage = round(float(monster_stats[attacker_position][1]) - float(monster_stats[attacker_position][1]) * (float(monster_stats[victim_position][3]) / 100),1)
-    monster_stats[victim_position][2] = float(monster_stats[victim_position][2]) - damage
+    monster_stats[victim_position][2] = round(monster_stats[victim_position][2] - damage, 1)
+    
     if monster_stats[victim_position][2] < 0:
         monster_stats[victim_position][2] = 0
 
@@ -231,7 +266,7 @@ def find_room(pointer): # Searches all rooms until it finds the same index, retu
         return
     
 def console(): # Main class
-    global world_map, map_pointer, player_health, cheese_mode, death, lastroom
+    global world_map, map_pointer, player_health, cheese_mode, death, lastroom, basic_len
     roomInx = world_map[map_pointer] # Copy room into buffer RoomInx
     room = [*[x[0] for x in roomInx][1:],'room'] # Creates a list of thing in the room
 
@@ -260,7 +295,7 @@ def console(): # Main class
             print('- chesse')
 
     elif inp[0] == 'help':
-            print('- possible commands:\n* help\n* examine [object]\n* grab [object]\n* drop[object]\n* attack [monster]\n* move [door]\n* cheese')
+            print('- possible commands:\n* help\n* save\n* end\n* examine [object]\n* grab/take [object]\n* drop[object]\n* attack [monster]\n* ask/join [companion]\n* move [door]\n* cheese')
     elif inp[0] == 'end':
             death = True
             return
@@ -278,7 +313,7 @@ def console(): # Main class
             
         elif inp[1] in list(chain.from_iterable(monster_stats)):
                 inx = int(list(chain.from_iterable(monster_stats)).index(inp[1]) / 5)
-                print('* This {0} has {1} attack and {2} health'.format(*monster_stats[inx][0:3]))
+                print('* {0} has {1} attack and {2} health'.format(*monster_stats[inx][0:3]))
         else: # prints description of item
             for item in roomInx: # looks through all items until it finds the right one
                 if item[0] == inp[1]:
@@ -334,22 +369,44 @@ def console(): # Main class
                                 map_pointer = find_room(item[3]) # Change room
                                 lastroom = item[3]
                                 playerInv.remove(thing)
-                            break
+                                break
 
                         else:
                             print("? You need a key to open this door")
                 else:
                     print("? You can't go through this object")
 
+    elif inp[0] in ['ask', 'join']:
+        x = 0 # Current index
+        check = False
+        for item in roomInx[1:]:
+            x += 1
+            if item[2] == 'companion':
+                check = True
+                if inp[1] == item[0]:
+                    monster_stats.insert(basic_len, [item[0],*[int(i) for i in item[3][1:-1].split(',')]])
+                    print('! ' + item[1])
+                    print('- {3}\'s attack: {0}, {3}\'s health: {1}, {3}\'s armor: {2}'.format(monster_stats[basic_len][1], monster_stats[basic_len][2],monster_stats[basic_len][3],monster_stats[basic_len][0]))
+                    del world_map[map_pointer][x]
+                    basic_len +=1
+                    x -=1
+                    break
+            
+            elif item == roomInx[-1] and check == True:
+                print('? The companion in this room has a different name')
+                break
+        else:
+            print('? There is no companion in this room')
     else:
         print('? You cant do that right now')
 
 
 
-    if len(monster_stats) == 1:
+    if len(monster_stats) == basic_len:
         monster_stats[0][2] = player_health
     else:
         monster_attack()
+        companion_attack()
     
 # --------- Global variables ---------
 
@@ -361,6 +418,7 @@ world_map = [] # Entire game map as a 3D list
 map_pointer = 0 # Index of current room in world_map
 monster_stats = [] # Monsters currently attacking with stats
 playerInv = [] # Player inventory with stats. 2D list
+basic_len = 1
 classes = {'regular':['player',3,10,12,5],'tank':['player',2,15,10,2],'rogue':['player',4,7,15,10]}
 
 # ------ init -----
