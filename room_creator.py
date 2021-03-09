@@ -88,13 +88,13 @@ def IO():
                 Map[pointer].append(['Unnamed item','unnamed item','none'])
                 editor(pointer,[x[0] for x in Map[pointer]].index('Unnamed item'))
                 
-        elif command[0] == 'room':
+        elif command[1] == 'room':
             pointer = None
             Map.append([['Unnamed room','unnamed room','[0,0]']])
             pointer = [x[0][0] for x in Map].index('Unnamed room')
             editor(pointer,None)
             
-        elif command[0] == 'item':
+        elif command[1] == 'item':
             if pointer == None:
                 print('! No room selected')
             else:
@@ -104,16 +104,37 @@ def IO():
 
     elif command[0] in ['delete','del']:
         rooms = [x[0][0] for x in Map]
-        if command[1] == None:
-            if pointer == None:
-                print('! No room selected')
-            else:
+        if pointer == None: 
+            if command[1] in rooms:
+                pointer = rooms.index(command[1])
                 if input('? Are you sure you want to delete {}?\n> '.format(Map[pointer][0][0])).lower() in ['yes','y']:
                     Map.remove(Map[pointer])
-        elif command[1] in rooms:
-            pointer = rooms.index(command[1])
-            if input('? Are you sure you want to delete {}?\n> '.format(Map[pointer][0][0])).lower() in ['yes','y']:
+                    print('- room deleted')
+                    pointer = None
+            else:
+                print('! No room selected')
+        else:
+            items = [x[0] for x in Map[pointer]]
+            if command[1] == None:
+                if input('? Are you sure you want to delete {}?\n> '.format(Map[pointer][0][0])).lower() in ['yes','y']:
                     Map.remove(Map[pointer])
+                    print('- room deleted')
+            elif command[1] in rooms:
+                pointer = rooms.index(command[1])
+                if input('? Are you sure you want to delete {}?\n> '.format(Map[pointer][0][0])).lower() in ['yes','y']:
+                    Map.remove(Map[pointer])
+                    print('- room deleted')
+                    pointer = None
+            elif command[1] in items:
+                if input('? Are you sure you want to delete {}?\n> '.format(command[1])).lower() in ['yes','y']:
+                    print(Map[pointer][items.index(command[1])])
+                    Map[pointer].remove(Map[pointer][items.index(command[1])])
+                    print('- room deleted')
+            else:
+                print('! Invalid argument')
+    else:
+        print('- Invalid instruction')
+
 
 
 
@@ -138,6 +159,8 @@ def lister(roomP):
     global Map
     
     if roomP == None: # Rooms
+        if len(Map) == 0:
+            print('- The map is empty')
         for room in Map:
             print('* ' + room[0][0] + '\n  - ' + room[0][1])
     else: # Items
@@ -211,3 +234,4 @@ def editor(roomP,itemP):
 
 while True:
     IO()
+
