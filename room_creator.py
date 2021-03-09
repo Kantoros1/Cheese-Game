@@ -47,14 +47,9 @@ def IO():
 
     elif command[0] in ['select','sel']: # Select room to edit
         rooms = [x[0][0] for x in Map] # Room names list
-        
-        if pointer != None: # Check for items
-            items = [x[0] for x in Map[pointer]] # Items names list
-            if command[1] in items:
-                Ipointer = items.index(command[1])
-                
-        elif command[1] in rooms: # Check for rooms
-            print('- Selected' + command[1])
+         
+        if command[1] in rooms: # Check for rooms
+            print('- Selected ' + command[1])
             pointer = rooms.index(command[1])
             
         else:
@@ -127,7 +122,6 @@ def IO():
                     pointer = None
             elif command[1] in items:
                 if input('? Are you sure you want to delete {}?\n> '.format(command[1])).lower() in ['yes','y']:
-                    print(Map[pointer][items.index(command[1])])
                     Map[pointer].remove(Map[pointer][items.index(command[1])])
                     print('- room deleted')
             else:
@@ -205,18 +199,21 @@ def editor(roomP,itemP):
                 inp = item[i]
             Map[roomP][itemP].append(inp)
 
-        formt = typ_format[Map[roomP][itemP][2]]
+        try:
+            formt = typ_format[Map[roomP][itemP][2]]
+        except:
+            print('- That is not a valid object type')
         item += ['']*(len(formt)+3-len(item))
         item = item[:len(formt)+3]
 
         for i, val in enumerate(formt):
-            print('h')
             print('- Current {}: '.format(val[0]) + item[i+3])
             inp = input('- New {}:\n> '.format(val[0])).lower()\
                 .replace('[','').replace(']','')\
                 .replace(',',' ').strip().split()
-            if inp == '':
-                inp = item[i+3]
+            if inp in ['',[]]:
+                inp = item[i+3].replace('[','').replace(']','')\
+                .replace(',',' ').strip().split()
             if val[1] == 1:
                 Map[roomP][itemP].append(inp[0])
             else:
@@ -226,7 +223,6 @@ def editor(roomP,itemP):
                 for i in inp:
                     text += i+','
                 text = text[:-1] + ']'
-                print(text)
                 Map[roomP][itemP].append(text)
         
         print('- Item editted')
@@ -234,4 +230,3 @@ def editor(roomP,itemP):
 
 while True:
     IO()
-
