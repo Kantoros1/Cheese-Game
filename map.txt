@@ -1,31 +1,73 @@
 #
-room1;As you enter the dungeon, and the large gate closes behind you, you realize there's no going back;[0,1]
-table;it's a table. there's a lamp on it, but that's about it.;none
-lamp;a lamp. it's bolted to the table.;grabable;[0,1,0];none
-door_1;A door! it leads to another room.;door;[0,2];locked
-iron_sword;A shiny new sword! I wanted to get one of these for a long time.;grabable;[3,0,2];sword
-key;bich;grabable;[0,0,0];none
+village;as you tell your mother goodbye, you are filled with determination. you will find the sacred treasure in the dark dungeon. adventure awaits!;[0,0]
+money;a few copper coins;grabable;[0,0,0];none
+forrest;set out into the forrest;door;[1,0];unlocked
+home;go back home;door;[0,1];unlocked
 #
-room2;You walk into the second room. it's a bit colder, but not like it's gonna stop you;[0,2]
-key;a universal key to a door.;grabable;[0,0,0];none
-door_1;A door! it leads to another room.;door;[0,1];unlocked
-goblin1;Ah! A goblin!;enemy;[2,2,5,2]
-goblin2;Ah! A goblin!;enemy;[2,2,5,2]
-carl;Ah! Carl!;companion;[2,4,5,2]
-door_2;A wooden door! it leads to another room, but this one needs a key;door;[1,2];locked
-wooden_sword;A sword! It's a bit worn but still works;grabable;[1,0,1];sword
+home;your home;[0,1]
+bed;comfy bed, but now isnt the time to sleep;none
+outside;go outside;door;[0,0];unlocked
+stove;a stove;none
+chest;your chest;door;[0,2];unlocked
 #
-room3;This is getting annoying.A third room wow so crazy;[1,2]
-door_1;A wooden door! it leads to another room.;door;[0,2];unlocked
-cheese;cheese;grabable;[1000,1000,0];cheese
-door_2;A door! it leads to another room.;door;[2,2];locked
+your_chest;you open the chest;[0,2]
+dagger;your trusty dagger. should be useful;grabable;[1,0,0];sword
+back;go back;door;[0,1];unlocked
 #
-room4;room;[2,2]
-door_1;A door! it leads to another room.;door;[1,2];unlocked
-pixie;pixie;enemy;[3,3,15,2]
+entrance;the entrance to the dungeon. its about to get serious;[2,0]
+back;go back to the forrest;door;[1,0];unlocked
+entrance;enter the dungeon;door;[3,0];unlocked
+tree;a tree;none
 #
-
-Formatting:
-Objects: Name;Comment;type;[stats];type of item
-Monsters stats:[Attack,Health,Percentage of attack deflected,Chance to deflect completely]
-Items stats:[increase of attack,increase of health,increase chance to deflect]
+forrest;as you walk through the forrest, you calm down a bit;[1,0]
+back;go back to the village;door;[0,0];unlocked
+forward;continue on your journey;door;[2,0];unlocked
+tree;a tree;none
+more trees;whole lotta trees;none
+#
+large_room;the first room of the dungeon;[3,0]
+outside;leave the dungeon;door;[2,0];unlocked
+hallway;go forward into a hallway;door;[4,0];unlocked
+left;turn left;door;[1,3];unlocked
+torch;a lit torch;none
+#
+short_hallway;a short hallway leading forward;[4,0]
+back;return to the large room;door;[3,0];unlocked
+forward;go forward;door;[5,0];unlocked
+torch;a lit torch;none
+#
+wasps;wasps! and a lot of them!;[5,0]
+wasp;a hostile wasp;enemy;[1,2,5,0]
+wasp;a hostile wasp;enemy;[1,2,5,0]
+wasp;a hostile wasp;enemy;[1,2,5,0]
+back;run away;door;[4,0];unlocked
+door;door to the next room;door;[6,0];unlocked
+right;go right to the next room;door;[5,1];unlocked
+wasp nest;the wasp nest. it seems to be empty;none
+#
+empty_room;this room is empty...;[5,1]
+wasp;a hostile wasp;enemy;[1,2,5,0]
+back;go back;door;[5,0];unlocked
+#
+after_wasps;a room. its nice and warm;[6,0]
+back;go back;door;[5,0];unlocked
+chest;a treasure chest. it could have interesting stuff;door;[7,0];unlocked
+torch;a lit torch;none
+table;a table! it has a piece of paper;none
+paper;a piece of paper. it reads: my wasp breeding experiment has gone horribly wrong!\nill try adding a bit of growth hormone to balance out the anger but i dont think its gonna work.;grabable;[0,0,0];none
+#
+wasp_chest;a treasure chest. lets see whats inside;[7,0]
+back;go back;door;[6,0];unlocked
+iron_sword;a shiny new sword! im sure noone will miss it for a while!;grabable;[2,0,5];sword
+key;a key! it should be useful;grabable;[0,0,0];none
+#
+front_of_door;youre standing in front of a door, but a surprise is waiting for you;[3,1]
+back;go back;door;[3,0];unlocked
+goblin;a goblin! hes guarding the door!;enemy;[2,5,15,0]
+torch;a lit torch;none
+rock;a rock. its blunt and heavy;grabable;[0,1,-1];none
+metal_door;a large metal door. it looks like it needs a key;door;[3,2];locked
+#
+unfinished;bruh, you cant be here, its still under construction;[3,2]
+back;oh ok sorry;door;[3,1];unlocked
+#
