@@ -1,7 +1,32 @@
-# Formatting:
-# Objects: Name;Comment;type;[stats];type of item
-# Monsters stats:[Attack,Health,Percentage of attack deflected,Chance to deflect completely]
-# Items stats:[increase of attack,increase of health,increase chance to deflect]
+'''How to use:
+
+Select: type select [room] to select room.
+
+List: if room selected lists its items. if no room select lists rooms.
+List [room]: list specified rooms' items
+
+Edit: if room selected edit its values.
+Edit [room]: same as above.
+Edit [item]: if room selected edit items' values.
+
+Create: If room selected creates new item. If no room creates new room.
+Create room: creates new room.
+Create room: if room selected creates new item.
+
+Delete: if room selected deletes room
+Delete [room]: deletes room
+Delete [item]: delete item in selected room
+
+Save: Adds room to map.txt
+
+Reload: Reloads map from map.txt
+
+CAUTION:
+Item name cannot be the same as item type
+Do not confuse Object type and item type.
+    Object type is preciselly defined (grabable, enemy, door etc.) 
+    Item type can be anything (except same as name)
+'''
 
 pointer = None # Current room, None means all rooms
 typ_format = {'grabable':[['statistics[attack increase, health increase, deflect increase]',3],['item type',1]],
@@ -9,17 +34,19 @@ typ_format = {'grabable':[['statistics[attack increase, health increase, deflect
               'enemy':[['statistics[attack, health, deflect, block]',4]],
               'none':[]}
 
-with open('map.txt') as F:
-    Map = []
-    for roomF in F.read().split('#')[1:]: # Split file into rooms
-        room = []
-        for lineF in roomF.split('\n')[1:-1]: # Split rooms into lines
-            room.append(lineF.split(';')[:]) # Split lines into elements
-            
-        Map.append(room)
-    Map = Map[:-1]
+def load():
+    global Map
+    with open('map.txt') as F:
+        Map = []
+        for roomF in F.read().split('#')[1:]: # Split file into rooms
+            room = []
+            for lineF in roomF.split('\n')[1:-1]: # Split rooms into lines
+                room.append(lineF.split(';')[:]) # Split lines into elements
+                
+            Map.append(room)
+        Map = Map[:-1]
 
-    #print(Map)
+        #print(Map)
 
 print('- Official room creator for Cheese game.')
 
@@ -126,6 +153,10 @@ def IO():
                     print('- room deleted')
             else:
                 print('! Invalid argument')
+                
+    elif command[0] == 'reload':
+        load()
+        print('- map reloaded')
     else:
         print('- Invalid instruction')
 
@@ -192,7 +223,7 @@ def editor(roomP,itemP):
     else:
         item = Map[roomP][itemP]
         Map[roomP][itemP] = []
-        for i, val in enumerate(['name','description','type']):    
+        for i, val in enumerate(['name','description','object type']):    
             print('- Current {}: '.format(val) + item[i])
             inp = input('- New {}:\n> '.format(val)).lower()
             if inp == '':
@@ -227,6 +258,6 @@ def editor(roomP,itemP):
         
         print('- Item editted')
     
-
+load()
 while True:
     IO()
