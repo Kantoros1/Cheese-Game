@@ -9,9 +9,9 @@ key;bich;grabable;[0,0,0];none
 room2;You walk into the second room. it's a bit colder, but not like it's gonna stop you;[0,2]
 key;a universal key to a door.;grabable;[0,0,0];none
 door_1;A door! it leads to another room.;door;[0,1];unlocked
-goblin1;Ah! A goblin!;enemy;[2,2,5,2]
-goblin2;Ah! A goblin!;enemy;[2,2,5,2]
-carl;Ah! Carl!;companion;[2,4,5,2]
+goblin1;Ah! A goblin!;enemy;[2,2,5,2];[[iron_swordie,3,0,2,sword],[key,0,0,0,none], [key2,0,0,0,none]];1
+goblin2;Ah! A goblin!;enemy;[2,2,5,2];[];0
+carl;Ah! Carl!;companion;[2,4,5,2];[];0
 door_2;A wooden door! it leads to another room, but this one needs a key;door;[1,2];locked
 wooden_sword;A sword! It's a bit worn but still works;grabable;[1,0,1];sword
 #
@@ -22,7 +22,7 @@ door_2;A door! it leads to another room.;door;[2,2];locked
 #
 room4;room;[2,2]
 door_1;A door! it leads to another room.;door;[1,2];unlocked
-pixie;pixie;enemy;[3,3,15,2]
+pixie;pixie;enemy;[3,3,15,2];[];0
 #
 
 Formatting:
