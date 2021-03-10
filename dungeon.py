@@ -34,58 +34,65 @@ def save():
     save.write(str(player_health) + "\n")
     save.write(str(playerInv) + "\n")
     save.write(str(map_pointer) + "\n")
-    save.write(str(lastroom))
+    save.write(str(lastroom) + "\n")
+    save.write(str(equiped_len) + "\n")
+    save.write(str(basic_len))
 
     save.close()
 
 def load(name):
-    global monster_stats, player_health, playerInv, map_pointer, lastroom, name_map
-    playerInv = [[]]
+    global monster_stats, player_health, playerInv, map_pointer, lastroom, name_map, equiped_len, basic_len
+    playerInv = []
     x = 0
     y = 0
-    monster_stats = [[]]
+    monster_stats = []
     load = open("saves/" + name + ".txt", "r")
     info = load.read()
     load.close()
     info_detail = info.split("$")
     info_detail = info_detail[1].split("\n")
+    lastroom = info_detail[4]
+    equiped_len = [int(i) for i in info_detail[5][1:-1].split(',')]
 
-    for i in info_detail[:-1]:
-        info_detail[x] = info_detail[x].replace("]","")
-        info_detail[x] = info_detail[x].replace("[","")
-        info_detail[x] = info_detail[x].replace("'","")
-        x += 1
-    x = 0
-
-    info_detail2 = info_detail[0].split(", ")
+    info_detail5 = info_detail[2].split(']')
     
-    for i in info_detail2:
-        if y == 5:
-            x +=1
-            y = 0
-            monster_stats.append([])
-        monster_stats[x].append(i)
-        y+=1
+
+    check = False
+        
+    for info in info_detail[2].split('[['): 
+        if info == info_detail[2].split(('[['))[-1]:
+            info = info + ','
+        info = info.replace("'", '')
+        item = []
+        for more_info in info.split('['):
+            more_info = more_info.replace(']', '').replace(' ','')
+            if more_info != '':
+                more_info = more_info[:-1].split(',')
+                item.append([more_info[0],*[int(i) for i in more_info[1:-1]], more_info[-1]]) 
+                check = True
+        if check == True:
+            playerInv.append(item)
+            check = False
+    
+    x = 0
+    for i in info_detail[0].split(']')[:-2]:
+        monster = []
+        i = i.replace('[', '').replace("'",'').replace(' ','')
+        more = i.split(',')
+        if '' in more:
+            more.remove('')
+        monster = ([more[0],*[int(i) for i in more[1:]]])
+        monster = monster
+        monster_stats.append(monster)
     
     player_health = int(info_detail[1])
-
-    info_detail2 = info_detail[2].split(", ")
-    y = 0
     
-    for i in info_detail2:
-        if y == 5:
-            x +=1
-            y = 0
-            playerInv.append([])
-        playerInv[x].append(i)
-        y+=1
-
-   
     map_pointer = int(info_detail[3])
     
-    lastroom = info_detail[4]
-
     name_map = ('saves/' + name + ".txt")
+    basic_len = int(info_detail[6])
+    
+
 
     
 ## --------     Combat       ---------
@@ -150,9 +157,20 @@ def attack(victim, attacker, attacker_position, victim_position): #Damage being 
     print("! " + attacker + " attacked " + victim + " and dealt " + str(damage) + " damage, " + str(monster_stats[victim_position][2]) + " remaining.")
     
     if monster_stats[victim_position][2] == 0: #control whether the victim died
-        monster_stats.pop(victim_position)
+        clear_inventory(victim_position)
+        monster_stats.pop(victim_position)      
         print("! The "+ victim +" died!")
         return "death"
+
+def clear_inventory(victim_position):
+    
+    for i in range(len(playerInv[victim_position])):
+        for item in playerInv[victim_position]:
+            dropItem(item, victim_position)
+    playerInv.pop(victim_position)
+    equiped_len.pop(victim_position)
+    print('- All items the monster held are now lying all over the room.')
+
 
 
 ##-------------- Menu -------------
@@ -201,43 +219,79 @@ def new_game():
 
     player_health = monster_stats[0][2] # Set max health
 
-def grabItem(item):
+def grabItem(item, inventory):
     global playerInv, world_map, map_pointer
     
-    for thing in playerInv: # Check if same item not already in inventory. if yes, drop
-        if item[4] == thing[4] and item[4].lower() != 'none':
-            print(f'- can\'t hold more than one {item[4]} at once')
-            dropItem(thing)
-            
-    playerInv.append([item[0],*[int(i) for i in item[3][1:-1].split(',')], item[4]]) # Add item to inventory
+    playerInv[0].append([item[0],*[int(i) for i in item[3][1:-1].split(',')], item[4]]) # Add item to inventory
     
     for i in world_map[map_pointer]: # Find item in world map, and delete
         if i[0] == item[0]:
             world_map[map_pointer].remove(i)
     print('- grabbed {}'.format(item[0]))
+
+def equipItem(item, inventory):
+    global playerInv, world_map, map_pointer, equiped_len
     
-    stats = item[3][1:-1].split(',') # Print which stats increased/decreased
+    playerInv[inventory].remove(item)
+    
+    for thing in playerInv[inventory][:equiped_len[inventory]]: # Check if same item not already in inventory. if yes, drop
+        if item[4] == thing[4] and item[4].lower() != 'none':
+            print(f'- can\'t hold more than one {item[4]} at once')
+            unequipItem(thing, inventory)
+
+    playerInv[inventory].insert(0, item)        
+    stats = item[1:-1] # Print which stats increased/decreased
     for i, st in enumerate(zip(stats,['attack','health','evade'])):
         if int(st[0]) != 0:
             dire = 'increased' if int(st[0]) > 0 else 'decreased'
-            print('! Player\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1]))
-            monster_stats[0][i+1] += int(st[0])
+            if monster == False:               
+                print('! {3}\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1], monster_stats[inventory][0]))
+            monster_stats[inventory][i+1] += int(st[0])
+    if monster == False:    
+        equiped_len[inventory] += 1
 
-    #print(monster_stats)
+def dropItem(item, inventory):
+    global playerInv, world_map, map_pointer, equiped_len
 
-def dropItem(item):
-    global playerInv, world_map, map_pointer
-    playerInv.remove(item) # Remove item from inventoy
+    if (playerInv[inventory].index(item)+1) <= equiped_len[inventory]:
+        unequipItem(item, inventory)
+        
+    playerInv[inventory].remove(item) # Remove item from inventory
     print('- dropped '+item[0])
     world_map[map_pointer].append([item[0],'Dropped by player','grabable',f'[{item[1]},{item[2]},{item[3]}]',item[4]]) # Add item back to map
     
+def unequipItem(item, inventory):
+    global playerInv, world_map, map_pointer, equiped_len
+    
+    playerInv[inventory].remove(item)
+    playerInv[inventory].append(item)
+    equiped_len[inventory] -= 1
+
     for i, st in enumerate(zip(item[1:],['attack','health','evade'])): # Print which stats increased/decreased
         if int(st[0]) != 0:
             dire = 'increased' if int(st[0]) < 0 else 'decreased'
-            print('! Player\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1]))
-            monster_stats[0][i+1] = int(monster_stats[0][i+1])
-            monster_stats[0][i+1] -= int(st[0])
-    
+            print('! {3}\'s {2} {0} by {1}!'.format(dire,abs(int(st[0])),st[1], monster_stats[inventory][0]))
+            monster_stats[inventory][i+1] = int(monster_stats[inventory][i+1])
+            monster_stats[inventory][i+1] -= int(st[0])
+
+def playerInvsetup(item):
+    global monster
+    z = 0
+    playerInv.append([])
+    if [i for i in item[4][2:-2].split(',')] != ['']: 
+        for y in range(len([i for i in item[4][2:-2].split('[')])):
+            playerInv[int(len(monster_stats)/5) + 1].append([i for i in item[4][2:-2].replace('[','').replace(' ','').split(']')[z].split(',')])
+            if z > 0:
+                playerInv[int(len(monster_stats)/5) + 1][z].remove(playerInv[int(len(monster_stats)/5) + 1][z][0])
+            z+=1
+    equiped_len.append(int(item[5]))
+        
+    if int(item[5]) > 0:
+        monster = True
+        for i in range(equiped_len[-1]):
+            equipItem(playerInv[-1][i],-1)
+    monster = False
+
 def readFile(): # reads the map file and translates into 3D list
     global world_map, map_pointer
     with open(name_map) as F:
@@ -255,9 +309,8 @@ def readFile(): # reads the map file and translates into 3D list
         #print(world_map)
 
 def find_room(pointer): # Searches all rooms until it finds the same index, returns position in 3D list
-        global death
         i = 0
-        for room in world_map: 
+        for room in world_map:
             if room[0][2] == pointer:
                 print('- ' + room[0][1])
 
@@ -266,7 +319,7 @@ def find_room(pointer): # Searches all rooms until it finds the same index, retu
         return
     
 def console(): # Main class
-    global world_map, map_pointer, player_health, cheese_mode, death, lastroom, basic_len
+    global world_map, map_pointer, player_health, cheese_mode, death, lastroom, basic_len, equiped_len, playerInv
     roomInx = world_map[map_pointer] # Copy room into buffer RoomInx
     room = [*[x[0] for x in roomInx][1:],'room'] # Creates a list of thing in the room
 
@@ -276,6 +329,7 @@ def console(): # Main class
         x += 1 
         if item[2] == 'enemy': # Test type
             monster_stats.append([item[0],*[int(i) for i in item[3][1:-1].split(',')]]) # Every time i use * i want to stop coding and go live in the woods alone
+            playerInvsetup(item)
             print('! ' + item[1])
             print('- {3}\'s attack: {0}, {3}\'s health: {1}, {3}\'s armor: {2}'.format(monster_stats[-1][1], monster_stats[-1][2],monster_stats[-1][3],monster_stats[-1][0]))
             del world_map[map_pointer][x] # Delete monster from map
@@ -326,13 +380,13 @@ def console(): # Main class
         if inp[1] == 'everything': # If specified, will attempt to grab everything
             for item in roomInx:
                 if item[2] == 'grabable':
-                    grabItem(item)
+                    grabItem(item, 0)
 
         else: # Grab specified item, if possible
             for item in roomInx:
                 if item[0] == inp[1]:
                     if item[2] == 'grabable':
-                        grabItem(item)
+                        grabItem(item, 0)
                     else:
                         print('? Cant grab {}'.format(item[0]))
                     break
@@ -340,12 +394,59 @@ def console(): # Main class
                 print('? There is no object like that')
                 
     elif inp[0] in ['drop','leave']:
-        for item in playerInv:
-            if item[0] == inp[1]:
-                dropItem(item)
-                break
-        else:
+        check_2 = False
+        if inp[1] in [i[0] for i in monster_stats[1:basic_len]]: 
+            inventory = [i[0] for i in monster_stats].index(inp[1])
+            if inp[2] in [i[0] for i in playerInv[inventory]]:
+                item = playerInv[inventory][int(list(chain.from_iterable(playerInv[inventory])).index(inp[2]) / 5)]
+                dropItem(item, inventory)
+                check_2 = True
+
+        elif check_2 == False:
+            for item in playerInv[0]:
+                if item[0] == inp[1]:
+                    dropItem(item, 0)
+                    check_2 = True
+                    break
+        if check_2 == False:
             print('? No such item in inventory')
+
+    elif inp[0] == 'equip':
+        check_2 = False
+        if inp[1] in [i[0] for i in monster_stats[1:]]:
+            inventory = [i[0] for i in monster_stats].index(inp[1])
+            if inp[2] in [i[0] for i in playerInv[inventory]]:
+                 item = playerInv[inventory][int(list(chain.from_iterable(playerInv[inventory])).index(inp[2]) / 5)]
+                 equipItem(item, inventory)
+                 check_2 = True
+                 
+        elif check_2 == False:
+            for item in playerInv[0]:
+                if item[0] == inp[1]:
+                    equipItem(item, 0)
+                    check_2 = True
+                    break
+                
+        if check_2 == False:
+            print('? There is no such equipable item in your inventory')
+
+    elif inp[0] == 'unequip':
+        check_2 = False
+        if inp[1] in [i[0] for i in monster_stats[1:basic_len]]:
+            inventory = [i[0] for i in monster_stats].index(inp[1])
+            if inp[2] in [i[0] for i in playerInv[inventory]]:
+                item = playerInv[inventory][int(list(chain.from_iterable(playerInv[inventory])).index(inp[2]) / 5)]
+                unequipItem(item, inventory)
+                check_2 = True
+                
+        elif check_2 == False:
+            for item in playerInv[0]:
+                if item[0] == inp[1]:
+                    unequipItem(item, 0)
+                    check_2 = True
+                    break
+        if check_2 == False:
+            print('? You aren\'t equiped with that object')
 
     elif inp[0] in ['attack',"brutalize"]:
         if inp[1] in list(chain.from_iterable(monster_stats)):
@@ -362,13 +463,13 @@ def console(): # Main class
                         map_pointer = find_room(item[3])
                         lastroom = item[3]
                     else:
-                        for thing in playerInv: # Check if player even has a key
+                        for thing in playerInv[0]: # Check if player even has a key
                             if thing[0] == 'key':
                                 print("- The door has been unlocked, but your key got stuck in the lock")
                                 world_map[map_pointer][i][4] = 'unlocked' # Unlock door in world_map for later
                                 map_pointer = find_room(item[3]) # Change room
                                 lastroom = item[3]
-                                playerInv.remove(thing)
+                                playerInv[0].remove(thing)
                                 break
 
                         else:
@@ -385,6 +486,11 @@ def console(): # Main class
                 check = True
                 if inp[1] == item[0]:
                     monster_stats.insert(basic_len, [item[0],*[int(i) for i in item[3][1:-1].split(',')]])
+
+                    playerInvsetup(item) 
+                    print(playerInv)
+                    print(equiped_len)
+
                     print('! ' + item[1])
                     print('- {3}\'s attack: {0}, {3}\'s health: {1}, {3}\'s armor: {2}'.format(monster_stats[basic_len][1], monster_stats[basic_len][2],monster_stats[basic_len][3],monster_stats[basic_len][0]))
                     del world_map[map_pointer][x]
@@ -397,6 +503,18 @@ def console(): # Main class
                 break
         else:
             print('? There is no companion in this room')
+
+    elif inp[0] == 'give':
+        if inp[1] in [i[0] for i in monster_stats[1:]]:
+            if inp[2] in [i[0] for i in playerInv[0][equiped_len[0]:]]:
+                item = playerInv[0][int(list(chain.from_iterable(playerInv[0])).index(inp[2]) / 5)]
+                inventory = [i[0] for i in monster_stats].index(inp[1])
+                playerInv[inventory].append(item)
+                print('- {0} received {1}'.format(inp[1],inp[2]))
+                playerInv[0].remove(item)
+
+
+            
     else:
         print('? You cant do that right now')
 
@@ -412,13 +530,15 @@ def console(): # Main class
 
 player_health = 10 # Health limit, not current value
 death = False
+monster = False
 name_map = 'map.txt' # Map file
 lastroom = '[0,0]' # Coordinates of last room in [x,y]
 world_map = [] # Entire game map as a 3D list
 map_pointer = 0 # Index of current room in world_map
 monster_stats = [] # Monsters currently attacking with stats
-playerInv = [] # Player inventory with stats. 2D list
+playerInv = [[]] # Player inventory with stats. 2D list
 basic_len = 1
+equiped_len = [0]
 classes = {'regular':['player',3,10,12,5],'tank':['player',2,15,10,2],'rogue':['player',4,7,15,10]}
 
 # ------ init -----
