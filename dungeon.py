@@ -1,4 +1,4 @@
-from random import randint
+import random
 from itertools import chain
 import os # For file creation
 
@@ -372,6 +372,18 @@ def console(): # Main class
             for item in roomInx: # looks through all items until it finds the right one
                 if item[0] == inp[1]:
                     print('- ' + item[1])
+                    
+                    if item[2] == "npc":
+                        stuff = item[4].split(",")
+                        if item[3] == "vendor":
+                            print("- " + item[0] + " is a vendor. You buy stuff from him for money.")
+                            print("- Here's " + item[0] + "'s stuff:")
+                            for i in stuff:
+                                print("*" + i)
+                                
+                        if item[3] == "chatter":
+                            print(random.choice(stuff))
+                    
                     break
             else:
                 print('? There is no object like that visible')
@@ -513,6 +525,18 @@ def console(): # Main class
                 print('- {0} received {1}'.format(inp[1],inp[2]))
                 playerInv[0].remove(item)
 
+    elif inp[0] == "buy":
+        if "money" in playerInv[0]:
+            for item in roomInx:
+                if inp[1] in item[4]:
+                    playerInv[0].append(inp[1])
+                    playerInv[0].remove("money")
+                else:
+                    print("Nobody got that.")
+                
+
+        else:
+            print("Nah you broke as hell rn")
 
             
     else:
