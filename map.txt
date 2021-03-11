@@ -71,6 +71,112 @@ torch;a lit torch;none
 rock;a rock. its blunt and heavy;grabable;[0,1,-1];none
 metal_door;a large metal door. it looks like it needs a key;door;[3,2];locked
 #
-unfinished;bruh, you cant be here, its still under construction;[3,2]
-back;oh ok sorry;door;[3,1];unlocked
+hallway_middle;you continue straight forward;[0,0]
+back;go back;door;[3,1];unlocked
+forward;continue forward;door;[3,3];unlocked
+torch;a lit torch;none
+#
+crossroad;you walk into a crossroad. the path branches three ways;[3,3]
+left;go left;door;[4,3];unlocked
+right;go right;door;[2,3];unlocked
+metal_door;a large metal door leading forward. it needs a key;door;[3,4];locked
+#
+path_left;the scribbles on the walls remind you of tonys stromboli;[4,3]
+back;go back;door;[3,3];unlocked
+forward;go forward;door;[5,3];unlocked
+left;go left;door;[4,2];unlocked
+bucket;a suspiciously smelly bucket;grabable;[0,1,-5];helmet
+torch;a lit torch;none
+#
+empty_2;an empty room. there is a weird hole in the ceiling;[5,3]
+back;go back;door;[4,3];unlocked
+hole;a hole in the ceiling. you cant see anything inside;none
+#
+goblin_2;you enter a slime covered room. it seems someone is living here;[4,2]
+back;go back;door;[4,3];unlocked
+goblin;another goblin;enemy;[2,5,15,0]
+chest;a chest in the back of the room;door;[4,1];unlocked
+right;go right;door;[5,2];unlocked
+slime;thick slime covering the walls;none
+torch;a lit torch;none
+#
+mimic;the chest has come alive, and sharp teeth come chomping for your member;[4,1]
+mimic;a hungry chest-like monster;enemy;[5,4,0,25]
+back;go back;door;[3,2];unlocked
+#
+slide_1;the floor crubles below you. just in time you grab a root sticking from the wall. you cannot climb back up;[0,0]
+down;let go and fall;door;[6,2];unlocked
+root;a root sticking from the wall. its not gonna hold much longer;none
+#
+room_under;you got away with a few bruises;[6,2]
+hole;hole in the ceiling;none
+forward;go forward;door;[7,2];unlocked
+torch;a lit torch;none
+#
+hallway_under;you enter a hallway branching in two;[7,2]
+left;go left;door;[7,1];unlocked
+back;go back;door;[6,2];unlocked
+right;go right;door;[7,3];unlocked
+ruggle;a pile of rubble in the floor;none
+#
+goblin_3;the darness of the room scares you a bit;[7,1]
+back;go back;door;[7,2];unlocked
+chest;a chest in the corner of the room;door;[6,1];unlocked
+large goblin;an overgrown goblin;enemy;[3,6,20,5]
+#
+chest_under;you open the chest;[0,0]
+shield_1;a shiny shield! this will be usefull against foes;grabable;[0,3,10];shield
+#
+hallway_back;finding your way back, you notice a door in the side. a sign says: welcome;[7,3]
+back;go back;door;[7,2];unlocked
+forward;go forward;door;[6,3];unlocked
+door;enter the door;door;[7,4];unlocked
+#
+wizard_room;you enter a bright library room.;[7,3]
+wizard;a short wizard standing beside a table;none
+table;a table bolted to the floor;none
+bookshelf;a large bookshelf filled with books;none
+back;go back;door;[7,3];unlocked
+#
+slide_2;you stand on the side of a slide;[6,3]
+jump;jump into the slide and see where it takes you;door;[5,3];unlocked
+back;go back;door;[7,3];unlocked
+#
+open_1;you enter a large open space. its lit by the sun through a hole in the ceiling;[2,3]
+hallway;go back to the hallway;door;[3,3];unlocked
+right;move right;door;[2,2];unlocked
+forward;move forward;door;[1,3];unlocked
+flower;a nice flower growing from the cracks in the floor;none
+#
+open_2;you can feel the breeze flowing from above;[1,3]
+back;go back;door;[2,3];unlocked
+person;a strange person in the corner of the room;door;[0,3];unlocked
+right;move right;door;[1,2];unlocked
+grass;some grass;none
+#
+open_3;you are directly above the hole. you can see birds flying above;[2,2]
+back;move back;door;[2,3];unlocked
+right;move right;door;[1,2];unlocked
+forward;move forward;door;[2,1];unlocked
+hole;you can see birds flying through the hole above;none
+#
+open_4;you can see more scribbles on the wall here;[1,2]
+back;move back;door;[1,3];unlocked
+right;move right;door;[2,2];unlocked
+forward;move forward;door;[1,1];unlocked
+scribbles;you can see weird scribbles on the wall. it looks like an ancient language;none
+#
+open_5;this corner of the room is a bit darker. grass doesnt grow here;[1,1]
+back;go back;door;[1,2];unlocked
+right;move right;door;[2,1];unlocked
+#
+wasp_2;another wasp nest! this isnt funny anymore;[2,1]
+left;move left;door;[1,1];unlocked
+back;go back;door;[2,2];unlocked
+wasp;an angry wasp!;enemy;[1,2,5,0]
+wasp_nest;the wasp nest. it seems to be empty;none
+#
+wasp_man;its the wasp man! what is he doing here?;[0,3]
+eric;ah! get away from me!\nits okay i wont hurt you. do you have a key to the next room?\ngive me a weapon so i can defend myself. a rock or something, and ill give you the key!;none
+back;go back;door;[1,3],unlocked
 #
