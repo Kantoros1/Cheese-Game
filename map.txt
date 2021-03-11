@@ -1,8 +1,11 @@
 #
 village;as you tell your mother goodbye, you are filled with determination. you will find the sacred treasure in the dark dungeon. adventure awaits!;[0,0]
 money;a few copper coins;grabable;[0,0,0];none
-forrest;set out into the forrest;door;[1,0];unlocked
+forest;set out into the forest;door;[1,0];unlocked
 home;go back home;door;[0,1];unlocked
+rock;roc.;grabable;[0,0,0];none
+tony;it's tony the chef;npc;vendor;cheese_[1,0,1]_none;rock
+rocco;it's your ol' buddy rocco;npc;chatter;Hey how ya doin' tough guy!,Who you kiddin' huh?,Hey get me some pasta sauce if you find it alright?
 #
 home;your home;[0,1]
 bed;comfy bed, but now isnt the time to sleep;none
@@ -15,11 +18,11 @@ dagger;your trusty dagger. should be useful;grabable;[1,0,0];sword
 back;go back;door;[0,1];unlocked
 #
 entrance;the entrance to the dungeon. its about to get serious;[2,0]
-back;go back to the forrest;door;[1,0];unlocked
+back;go back to the forest;door;[1,0];unlocked
 entrance;enter the dungeon;door;[3,0];unlocked
 tree;a tree;none
 #
-forrest;as you walk through the forrest, you calm down a bit;[1,0]
+forest;as you walk through the forest, you calm down a bit;[1,0]
 back;go back to the village;door;[0,0];unlocked
 forward;continue on your journey;door;[2,0];unlocked
 tree;a tree;none

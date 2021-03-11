@@ -1,4 +1,4 @@
-from random import randint
+import random
 from itertools import chain
 import os # For file creation
 
@@ -372,6 +372,17 @@ def console(): # Main class
             for item in roomInx: # looks through all items until it finds the right one
                 if item[0] == inp[1]:
                     print('- ' + item[1])
+                    
+                    if item[2] == "npc":
+                        stuff = item[4].split("_")
+                        if item[3] == "vendor":
+                            print("- " + item[0] + " is a vendor. You buy stuff from him for money.")
+                            print("- Here's " + item[0] + "'s stuff:")
+                            print("* you can trade " + stuff[0] + ' for ' + item[5])
+                                
+                        if item[3] == "chatter":
+                            print(random.choice(stuff))
+                    
                     break
             else:
                 print('? There is no object like that visible')
@@ -513,7 +524,19 @@ def console(): # Main class
                 print('- {0} received {1}'.format(inp[1],inp[2]))
                 playerInv[0].remove(item)
 
-
+    elif inp[0] == "buy":
+        for item in roomInx[1:]:
+            if len(item) > 4:
+                if item[4].split('_')[0] == inp[1]:
+                    sell = item[4].split('_')
+                    if item[5] in list(chain.from_iterable(playerInv[0])):
+                        playerInv[0].append([sell[0],*[int(i) for i in sell[1][1:-1].split(',')], sell[2]])
+                        playerInv[0].remove(playerInv[0][int(list(chain.from_iterable(playerInv[0])).index(item[5]) / 5)])
+                        print('- You just bought cheese')
+                        break
+        else:
+            print("? Nobody got that.")
+            
             
     else:
         print('? You cant do that right now')
@@ -532,7 +555,7 @@ player_health = 10 # Health limit, not current value
 death = False
 monster = False
 name_map = 'map.txt' # Map file
-lastroom = '[0,0]' # Coordinates of last room in [x,y]
+lastroom = '[0,1]' # Coordinates of last room in [x,y]
 world_map = [] # Entire game map as a 3D list
 map_pointer = 0 # Index of current room in world_map
 monster_stats = [] # Monsters currently attacking with stats
