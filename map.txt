@@ -3,7 +3,8 @@ village;as you tell your mother goodbye, you are filled with determination. you 
 money;a few copper coins;grabable;[0,0,0];none
 forest;set out into the forest;door;[1,0];unlocked
 home;go back home;door;[0,1];unlocked
-tony;it's tony the chef;npc;vendor;cheese,delicious cheese stromboli,homeward bone
+rock;roc.;grabable;[0,0,0];none
+tony;it's tony the chef;npc;vendor;cheese_[1,0,1]_none;rock
 rocco;it's your ol' buddy rocco;npc;chatter;Hey how ya doin' tough guy!,Who you kiddin' huh?,Hey get me some pasta sauce if you find it alright?
 #
 home;your home;[0,1]
