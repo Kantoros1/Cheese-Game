@@ -1,182 +1,188 @@
 #
-village;as you tell your mother goodbye, you are filled with determination. you will find the sacred treasure in the dark dungeon. adventure awaits!;[0,0]
+village;As you tell your mother goodbye, you are filled with determination. you will find the sacred treasure in the dark dungeon. adventure awaits!;[0,0]
 money;a few copper coins;grabable;[0,0,0];none
-forest;set out into the forest;door;[1,0];unlocked
+forest;the trail from the village leads into the dark forest nearby;door;[1,0];unlocked
 home;go back home;door;[0,1];unlocked
 rock;roc.;grabable;[0,0,0];none
-tony;it's tony the chef;npc;vendor;cheese_[1,0,1]_none;rock
-rocco;it's your ol' buddy rocco;npc;chatter;Hey how ya doin' tough guy!,Who you kiddin' huh?,Hey get me some pasta sauce if you find it alright?
+tony;it's tony the chef;npc;vendor;cheese_[1,0,1]_none;money
+rocco;it's your ol' buddy rocco;npc;chatter;Hey how ya doin' tough guy!,Who you kiddin' huh?,Hey get me some pasta sauce if you find it alright?, I am walking here
 #
-home;your home;[0,1]
+home;Your sweet home;[0,1]
 bed;comfy bed, but now isnt the time to sleep;none
 outside;go outside;door;[0,0];unlocked
-stove;a stove;none
-chest;your chest;door;[0,2];unlocked
+stove;brick stove, you remember cooking on it just yesterday;none
+chest;your chest, might try opening it;door;[0,2];unlocked
 #
-your_chest;you open the chest;[0,2]
-dagger;your trusty dagger. should be useful;grabable;[1,0,0];sword
-back;go back;door;[0,1];unlocked
+your_chest;You open the chest;[0,2]
+dagger;your trusty dagger. Should be useful;grabable;[1,0,0];sword
+back;try moving away from the chest;door;[0,1];unlocked
 #
-entrance;the entrance to the dungeon. its about to get serious;[2,0]
-back;go back to the forest;door;[1,0];unlocked
-entrance;enter the dungeon;door;[3,0];unlocked
-tree;a tree;none
+entrance;As you aproach the entrance to the dungeon you feel the fear rise in you. Its about to get serious;[2,0]
+back;trail leading back to the forest;door;[1,0];unlocked
+entrance;entrance to the dungeon, it will be hard to enter;door;[3,0];unlocked
+tree;a tall oak tree;none
 #
-forest;as you walk through the forest, you calm down a bit;[1,0]
-back;go back to the village;door;[0,0];unlocked
-forward;continue on your journey;door;[2,0];unlocked
-tree;a tree;none
+forest;As you follow the trail through the forest, you calm down a bit;[1,0]
+back;trail leads back to the village;door;[0,0];unlocked
+forward;you fell determination in you to continue on your journey;door;[2,0];unlocked
+tree;just a regular tree;none
 more trees;whole lotta trees;none
 #
-large_room;the first room of the dungeon;[3,0]
-outside;leave the dungeon;door;[2,0];unlocked
-hallway;go forward into a hallway;door;[4,0];unlocked
-left;turn left;door;[1,3];unlocked
+large_room;You enter a moody cave, only lit up by one torch;[3,0]
+outside;escape from this terror;door;[2,0];unlocked
+hallway;a narrow hallway leading out of the moody cave;door;[4,0];unlocked
+left;left of you there is a tunnel supported by columns of wood;door;[1,3];unlocked
 torch;a lit torch;none
 #
-short_hallway;a short hallway leading forward;[4,0]
-back;return to the large room;door;[3,0];unlocked
-forward;go forward;door;[5,0];unlocked
-torch;a lit torch;none
+short_hallway;You can finally straighten up as you walk into a slightly wider hallway;[4,0]
+back;the extremely narrow hallway leading into the big moody room;door;[3,0];unlocked
+forward;the hallway continues straight forward;door;[5,0];unlocked
+torch;a littttt torch;none
 #
-wasps;wasps! and a lot of them!;[5,0]
-wasp;a hostile wasp;enemy;[1,2,5,0]
-wasp;a hostile wasp;enemy;[1,2,5,0]
-wasp;a hostile wasp;enemy;[1,2,5,0]
-back;run away;door;[4,0];unlocked
-door;door to the next room;door;[6,0];unlocked
-right;go right to the next room;door;[5,1];unlocked
+wasps;As you enter a room with a hole in the ceiling you notice a big wasp nest hanging from the ceiling. Wasps!;[5,0]
+wasp_1;A hostile wasp just happy to be there;enemy;[1,2,5,0];[];0
+wasp_2;A hostile wasp that wants to fucking kill you;enemy;[1,2,5,0];[];0
+wasp_3;A hostile wasp ordering other wasps around;enemy;[1,2,5,0];[];0
+back;the narrow hallway awaits this way;door;[4,0];unlocked
+door;you see a wooden door leading out of the room, who knows what await behind this door;door;[6,0];unlocked
+right;the room stretches to the right, there might be some loot;door;[5,1];unlocked
 wasp nest;the wasp nest. it seems to be empty;none
 #
-empty_room;this room is empty...;[5,1]
-wasp;a hostile wasp;enemy;[1,2,5,0]
-back;go back;door;[5,0];unlocked
+empty_room;After you examine this side of the room, you find nothing;[5,1]
+wasp;A hostile lonely wasp... would be cruel to kill her;enemy;[1,2,5,0]
+back;the other part of the room with the wasp nest;door;[5,0];unlocked
 #
-after_wasps;a room. its nice and warm;[6,0]
-back;go back;door;[5,0];unlocked
-chest;a treasure chest. it could have interesting stuff;door;[7,0];unlocked
+after_wasps;You walk through the door, its nice and warm;[6,0]
+back;behind you is the door you just walked through;door;[5,0];unlocked
+chest;a treasure chest. it could have some interesting stuff;door;[7,0];unlocked
 torch;a lit torch;none
-table;a table! it has a piece of paper;none
+table;a table! it has a piece of paper on it;none
 paper;a piece of paper. it reads: my wasp breeding experiment has gone horribly wrong!\nill try adding a bit of growth hormone to balance out the anger but i dont think its gonna work.;grabable;[0,0,0];none
 #
-wasp_chest;a treasure chest. lets see whats inside;[7,0]
-back;go back;door;[6,0];unlocked
+wasp_chest;A treasure chest. lets see whats inside;[7,0]
+back;try moving back to the room;door;[6,0];unlocked
 iron_sword;a shiny new sword! im sure noone will miss it for a while!;grabable;[2,0,5];sword
-key;a key! it should be useful;grabable;[0,0,0];none
+key;a key! it should prove useful;grabable;[0,0,0];none
 #
-front_of_door;youre standing in front of a door, but a surprise is waiting for you;[3,1]
+front_of_door;As you're walking through the tunnel you notice a door at the end of the tunnel;[3,1]
 back;go back;door;[3,0];unlocked
-goblin;a goblin! hes guarding the door!;enemy;[2,5,15,0]
+goblin;However as you approach the door, you notice a goblin sitting by it.;enemy;[2,5,15,0];[[sleeve,0,1,0,sleeve]];1
 torch;a lit torch;none
 rock;a rock. its blunt and heavy;grabable;[0,1,-1];none
 metal_door;a large metal door. it looks like it needs a key;door;[3,2];locked
 #
-hallway_middle;you continue straight forward;[0,0]
-back;go back;door;[3,1];unlocked
-forward;continue forward;door;[3,3];unlocked
+hallway_middle;You walk through the door and all there is an empty room;[3,2]
+metal_door;the large open metal door;door;[3,1];unlocked
+forward;there is only one way out of this room, forward;door;[3,3];unlocked
 torch;a lit torch;none
 #
-crossroad;you walk into a crossroad. the path branches three ways;[3,3]
-left;go left;door;[4,3];unlocked
-right;go right;door;[2,3];unlocked
+crossroad;You enter a crossroad. There is a big metal door, you will need a key to get through. The room branches to both the left and right.;[3,3]
+left;there is an open door leading towards a dark hallway;door;[4,3];unlocked
+right;to the right you can see a big open space;door;[2,3];unlocked
 metal_door;a large metal door leading forward. it needs a key;door;[3,4];locked
 #
-path_left;the scribbles on the walls remind you of tonys stromboli;[4,3]
-back;go back;door;[3,3];unlocked
-forward;go forward;door;[5,3];unlocked
-left;go left;door;[4,2];unlocked
+path_left;The scribbles on the walls remind you of tony's stromboli 👌;[4,3]
+back;Behind you there is the open door and the crossroad;[3,3];unlocked
+forward;you see a tunnel leading towards a possibly empty room;door;[5,3];unlocked
+left;there is a hallway leading towards a dark room;door;[4,2];unlocked
 bucket;a suspiciously smelly bucket;grabable;[0,1,-5];helmet
 torch;a lit torch;none
 #
-empty_2;an empty room. there is a weird hole in the ceiling;[5,3]
-back;go back;door;[4,3];unlocked
+empty_2;You enter an empty room. There is a weird hole in the ceiling;[5,3]
+back;behind you there is the tunnel;door;[4,3];unlocked
 hole;a hole in the ceiling. you cant see anything inside;none
 #
-goblin_2;you enter a slime covered room. it seems someone is living here;[4,2]
-back;go back;door;[4,3];unlocked
-goblin;another goblin;enemy;[2,5,15,0]
+goblin_2;You enter a slime covered room. It seems someone is living here;[4,2]
+back;Behind you is the hallway leading towards the empty room;door;[4,3];unlocked
+goblin;another goblin, deppresing;enemy;[2,5,15,0];[[can,0,1,0,glove]];1
 chest;a chest in the back of the room;door;[4,1];unlocked
-right;go right;door;[5,2];unlocked
-slime;thick slime covering the walls;none
-torch;a lit torch;none
+right;to the right there is something shiny in the right side of the room;door;[5,2];unlocked
+slime;thick slime is covering the walls;none
 #
 mimic;the chest has come alive, and sharp teeth come chomping for your member;[4,1]
-mimic;a hungry chest-like monster;enemy;[5,4,0,25]
-back;go back;door;[3,2];unlocked
+mimic;a hungry chest-like monster;enemy;[5,4,0,25];[];0
+back;try moving back into the room;door;[3,2];unlocked
 #
-slide_1;the floor crubles below you. just in time you grab a root sticking from the wall. you cannot climb back up;[0,0]
-down;let go and fall;door;[6,2];unlocked
+slide_1;As you approach the shiny object the floor crubles below you. Just in time you grab a root sticking from the wall. You cannot climb back up;[0,0]
+down;there is only one option, let go and fall;door;[6,2];unlocked
 root;a root sticking from the wall. its not gonna hold much longer;none
 #
-room_under;you got away with a few bruises;[6,2]
+room_under;You fall hard on the floor. You got away just with a few bruises. The shiny object lies in front of you.;[6,2]
 hole;hole in the ceiling;none
-forward;go forward;door;[7,2];unlocked
+forward;there is a hallway in front of you;door;[7,2];unlocked
+ring;a saphirre ring, who knows what it does;[1,-1,0];ring
 torch;a lit torch;none
 #
-hallway_under;you enter a hallway branching in two;[7,2]
-left;go left;door;[7,1];unlocked
-back;go back;door;[6,2];unlocked
-right;go right;door;[7,3];unlocked
-ruggle;a pile of rubble in the floor;none
+hallway_under;You enter a hallway branching in two.;[7,2]
+left;you feel warmth coming from your left;door;[7,1];unlocked
+back;you can go back, but as you know it's a dead end;[6,2];unlocked
+right;it smells weird to your right, i wouldn't go there;door;[7,3];unlocked
+ruggle;a pile of rubble on the floor;none
 #
-goblin_3;the darness of the room scares you a bit;[7,1]
-back;go back;door;[7,2];unlocked
+goblin_3;The darness of the warm room scares you a bit;[7,1]
+back;behind you there is the hallway you just walked through;door;[7,2];unlocked
 chest;a chest in the corner of the room;door;[6,1];unlocked
-large goblin;an overgrown goblin;enemy;[3,6,20,5]
+large goblin;an overgrown goblin;enemy;[3,6,20,5];[];0
+ashes;there are ashes lying in the corner of the room, probably from a recent fire;none
 #
-chest_under;you open the chest;[0,0]
+chest_under;You open the chest.;[6,1]
 shield_1;a shiny shield! this will be usefull against foes;grabable;[0,3,10];shield
+back;might try moving back to the room;door[7,1]
 #
-hallway_back;finding your way back, you notice a door in the side. a sign says: welcome;[7,3]
-back;go back;door;[7,2];unlocked
-forward;go forward;door;[6,3];unlocked
-door;enter the door;door;[7,4];unlocked
+hallway_back;Finding your way back, you notice a door in the side. a sign says: welcome;[7,3]
+back;behind you is the hallway;door;[7,2];unlocked
+forward;in front of you there seems to be something steep;door;[6,3];unlocked
+door;in front of you is the door into the lair of this creature;door;[7,4];unlocked
 #
-wizard_room;you enter a bright library room.;[7,3]
-wizard;a short wizard standing beside a table;none
+wizard_room;You enter a bright library room. There is a man sitting in a chair next to a bookshelf.;[7,3]
+wizard;a short wizard sitting next to a bookshelf;npc;chatter;HMMMMMM boy you seem to be quite an adventurer mate........ Mi casa es su casa feel free to take any object lil boy I don't have a need for valuables fam
 table;a table bolted to the floor;none
+chair;a chair, on which is sitting the wizard;none
 bookshelf;a large bookshelf filled with books;none
-back;go back;door;[7,3];unlocked
+back;way back into the room;door;[7,3];unlocked
 #
-slide_2;you stand on the side of a slide;[6,3]
+slide_2;You approach a side of the room and you notice a slide;[6,3]
 jump;jump into the slide and see where it takes you;door;[5,3];unlocked
-back;go back;door;[7,3];unlocked
+back;return into the room;door;[7,3];unlocked
 #
-open_1;you enter a large open space. its lit by the sun through a hole in the ceiling;[2,3]
+open_1;You enter a large open space. it's lit by the sun through a hole in the ceiling;[2,3]
 hallway;go back to the hallway;door;[3,3];unlocked
-right;move right;door;[2,2];unlocked
-forward;move forward;door;[1,3];unlocked
+right;to your right there doesn't seem to be anything special;door;[2,2];unlocked
+forward;in front of you there doesn't seem to be anything special;door;[1,3];unlocked
 flower;a nice flower growing from the cracks in the floor;none
 #
-open_2;you can feel the breeze flowing from above;[1,3]
-back;go back;door;[2,3];unlocked
-person;a strange person in the corner of the room;door;[0,3];unlocked
-right;move right;door;[1,2];unlocked
+open_2;You can feel the breeze flowing from above;[1,3]
+back;behind you there is nothing special;door;[2,3];unlocked
+person;there is a strange person in the corner of the room;door;[0,3];unlocked
+right;to your right there doesn't seem to be anything special;door;[1,2];unlocked
 grass;some grass;none
 #
-open_3;you are directly above the hole. you can see birds flying above;[2,2]
-back;move back;door;[2,3];unlocked
-right;move right;door;[1,2];unlocked
-forward;move forward;door;[2,1];unlocked
+open_3;You are directly above the hole. you can see birds flying above;[2,2]
+back;there doesn't seem to be anything special there;door;[2,3];unlocked
+right;there doesn't seem to be anything special there;door;[1,2];unlocked
+forward;there doesn't seem to be anything special there;door;[2,1];unlocked
 hole;you can see birds flying through the hole above;none
 #
-open_4;you can see more scribbles on the wall here;[1,2]
-back;move back;door;[1,3];unlocked
-right;move right;door;[2,2];unlocked
-forward;move forward;door;[1,1];unlocked
+open_4;There are scribbles on the wall here;[1,2]
+back;there doesn't seem to be anything special there;door;[1,3];unlocked
+right;there doesn't seem to be anything special there;door;[2,2];unlocked
+forward;there doesn't seem to be anything special there;door;[1,1];unlocked
 scribbles;you can see weird scribbles on the wall. it looks like an ancient language;none
 #
 open_5;this corner of the room is a bit darker. grass doesnt grow here;[1,1]
-back;go back;door;[1,2];unlocked
-right;move right;door;[2,1];unlocked
+back;there doesn't seem to be anything special there;door;[1,2];unlocked
+right;there doesn't seem to be anything special there;door;[2,1];unlocked
 #
-wasp_2;another wasp nest! this isnt funny anymore;[2,1]
-left;move left;door;[1,1];unlocked
-back;go back;door;[2,2];unlocked
-wasp;an angry wasp!;enemy;[1,2,5,0]
+wasp_2;Another wasp nest! this isnt funny anymore;[2,1]
+left;there doesn't seem to be anything special there;door;[1,1];unlocked
+back;there doesn't seem to be anything special there;door;[2,2];unlocked
+wasp;A pissed wasp!;enemy;[1,2,5,0];[];0
 wasp_nest;the wasp nest. it seems to be empty;none
 #
-wasp_man;its the wasp man! what is he doing here?;[0,3]
-eric;ah! get away from me!\nits okay i wont hurt you. do you have a key to the next room?\ngive me a weapon so i can defend myself. a rock or something, and ill give you the key!;none
+wasp_man;It's the wasp man, you know! What is he doing here?;[0,3]
+cuomo;Ah! get away from me!Its okay i wont hurt you. do you have a key to the next room? Give me a weapon so i can defend myself. A rock or something, and ill give you the key!;npc;vendor;key_[0,0,0]_none;rock
 back;go back;door;[1,3],unlocked
+#
+large_room2;This is it. Soon there will be more of Cuomo the wasp man and spanglish wizard!;[3,4]
+door;door;door;[3,3]
 #
