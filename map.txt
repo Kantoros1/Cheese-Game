@@ -30,7 +30,7 @@ more trees;whole lotta trees;none
 large_room;You enter a moody cave, only lit up by one torch;[3,0]
 outside;escape from this terror;door;[2,0];unlocked
 hallway;a narrow hallway leading out of the moody cave;door;[4,0];unlocked
-left;left of you there is a tunnel supported by columns of wood;door;[1,3];unlocked
+left;left of you there is a tunnel supported by columns of wood;door;[3,1];unlocked
 torch;a lit torch;none
 #
 short_hallway;You can finally straighten up as you walk into a slightly wider hallway;[4,0]
@@ -165,7 +165,7 @@ hole;you can see birds flying through the hole above;none
 #
 open_4;There are scribbles on the wall here;[1,2]
 back;there doesn't seem to be anything special there;door;[1,3];unlocked
-rat;carl the rat, he seems friendly;companion;[2;5;10;15];[];0
+rat;carl the rat, he seems friendly;companion;[2,5,10,15];[];0
 right;there doesn't seem to be anything special there;door;[2,2];unlocked
 forward;there doesn't seem to be anything special there;door;[1,1];unlocked
 scribbles;you can see weird scribbles on the wall. it looks like an ancient language;none
