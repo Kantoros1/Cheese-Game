@@ -21,6 +21,28 @@ back;trail leading back to the forest;door;[1,0];unlocked
 entrance;entrance to the dungeon, it will be hard to enter;door;[3,0];unlocked
 tree;a tall oak tree;none
 #
+village;As you tell your mother goodbye, you are filled with determination. you will find the sacred treasure in the dark dungeon. adventure awaits!;[0,0]
+money;a few copper coins;grabable;[0,0,0];none
+forest;the trail from the village leads into the dark forest nearby;door;[1,0];unlocked
+home;go back home;door;[0,1];unlocked
+tony;it's tony the chef;npc;vendor;cheese_[1,0,1]_none;money
+rocco;it's your ol' buddy rocco;npc;chatter;Hey how ya doin' tough guy!_Who you kiddin' huh?_Hey get me some pasta sauce if you find it alright?_ I am walking here
+#
+home;Your sweet home;[0,1]
+bed;comfy bed, but now isnt the time to sleep;none
+outside;go outside;door;[0,0];unlocked
+stove;brick stove, you remember cooking on it just yesterday;none
+chest;your chest, might try opening it;door;[0,2];unlocked
+#
+your_chest;You open the chest;[0,2]
+dagger;your trusty dagger. Should be useful;grabable;[1,0,0];sword
+back;try moving away from the chest;door;[0,1];unlocked
+#
+entrance;As you aproach the entrance to the dungeon you feel the fear rise in you. Its about to get serious;[2,0]
+back;trail leading back to the forest;door;[1,0];unlocked
+entrance;entrance to the dungeon, it will be hard to enter;door;[3,0];unlocked
+tree;a tall oak tree;none
+#
 forest;As you follow the trail through the forest, you calm down a bit;[1,0]
 back;trail leads back to the village;door;[0,0];unlocked
 forward;you fell determination in you to continue on your journey;door;[2,0];unlocked
@@ -48,7 +70,7 @@ right;the room stretches to the right, there might be some loot;door;[5,1];unloc
 wasp nest;the wasp nest. it seems to be empty;none
 #
 empty_room;After you examine this side of the room, you find nothing;[5,1]
-wasp;A hostile lonely wasp... would be cruel to kill her;enemy;[1,2,5,0]
+wasp;A hostile lonely wasp... would be cruel to kill her;enemy;[1,2,5,0];[];0
 back;the other part of the room with the wasp nest;door;[5,0];unlocked
 #
 after_wasps;You walk through the door, its nice and warm;[6,0]
@@ -56,7 +78,7 @@ back;behind you is the door you just walked through;door;[5,0];unlocked
 chest;a treasure chest. it could have some interesting stuff;door;[7,0];unlocked
 torch;a lit torch;none
 table;a table! it has a piece of paper on it;none
-paper;a piece of paper. it reads: my wasp breeding experiment has gone horribly wrong!\nill try adding a bit of growth hormone to balance out the anger but i dont think its gonna work.;grabable;[0,0,0];none
+paper;a piece of paper. it reads: my wasp breeding experiment has gone horribly wrong!\nill try adding a bit of growth hormone to balance out the anger but i dont think its gonna work.;none
 #
 wasp_chest;A treasure chest. lets see whats inside;[7,0]
 back;try moving back to the room;door;[6,0];unlocked
@@ -67,7 +89,6 @@ front_of_door;As you're walking through the tunnel you notice a door at the end 
 back;go back;door;[3,0];unlocked
 goblin;However as you approach the door, you notice a goblin sitting by it.;enemy;[2,5,15,0];[[sleeve,0,1,0,sleeve]];1
 torch;a lit torch;none
-rock;a rock. its blunt and heavy;grabable;[0,1,-1];none
 metal_door;a large metal door. it looks like it needs a key;door;[3,2];locked
 #
 hallway_middle;You walk through the door and all there is an empty room;[3,2]
@@ -134,7 +155,7 @@ forward;in front of you there seems to be something steep;door;[6,3];unlocked
 door;in front of you is the door into the lair of this creature;door;[7,4];unlocked
 #
 wizard_room;You enter a bright library room. There is a man sitting in a chair next to a bookshelf.;[7,4]
-wizard;a short wizard sitting next to a bookshelf;npc;chatter;HMMMMMM boy you seem to be quite an adventurer mate........ Mi casa es su casa feel free to take any object lil boy I don't have a need for valuables fam
+wizard;a short wizard sitting next to a bookshelf;npc;chatter;HMMMMMM boy you seem to be quite an adventurer mate........ Mi casa es su casa feel free to take any object lil boy. I don't have a need for valuables fam
 table;a table bolted to the floor;none
 rock;roc.;grabable;[0,0,0];none
 chair;a chair, on which is sitting the wizard;none
