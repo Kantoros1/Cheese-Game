@@ -4,7 +4,7 @@ money;a few copper coins;grabable;[0,0,0];none
 forest;the trail from the village leads into the dark forest nearby;door;[1,0];unlocked
 home;go back home;door;[0,1];unlocked
 tony;it's tony the chef;npc;vendor;cheese_[1,0,1]_none;money
-rocco;it's your ol' buddy rocco;npc;chatter;Hey how ya doin' tough guy!,Who you kiddin' huh?,Hey get me some pasta sauce if you find it alright?, I am walking here
+rocco;it's your ol' buddy rocco;npc;chatter;Hey how ya doin' tough guy!_Who you kiddin' huh?_ Hey get me some pasta sauce if you find it alright?_ I am walking here
 #
 home;Your sweet home;[0,1]
 bed;comfy bed, but now isnt the time to sleep;none
@@ -133,7 +133,7 @@ back;behind you is the hallway;door;[7,2];unlocked
 forward;in front of you there seems to be something steep;door;[6,3];unlocked
 door;in front of you is the door into the lair of this creature;door;[7,4];unlocked
 #
-wizard_room;You enter a bright library room. There is a man sitting in a chair next to a bookshelf.;[7,3]
+wizard_room;You enter a bright library room. There is a man sitting in a chair next to a bookshelf.;[7,4]
 wizard;a short wizard sitting next to a bookshelf;npc;chatter;HMMMMMM boy you seem to be quite an adventurer mate........ Mi casa es su casa feel free to take any object lil boy I don't have a need for valuables fam
 table;a table bolted to the floor;none
 rock;roc.;grabable;[0,0,0];none
