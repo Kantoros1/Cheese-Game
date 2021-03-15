@@ -4,28 +4,6 @@ money;a few copper coins;grabable;[0,0,0];none
 forest;the trail from the village leads into the dark forest nearby;door;[1,0];unlocked
 home;go back home;door;[0,1];unlocked
 tony;it's tony the chef;npc;vendor;cheese_[1,0,1]_none;money
-rocco;it's your ol' buddy rocco;npc;chatter;Hey how ya doin' tough guy!_Who you kiddin' huh?_ Hey get me some pasta sauce if you find it alright?_ I am walking here
-#
-home;Your sweet home;[0,1]
-bed;comfy bed, but now isnt the time to sleep;none
-outside;go outside;door;[0,0];unlocked
-stove;brick stove, you remember cooking on it just yesterday;none
-chest;your chest, might try opening it;door;[0,2];unlocked
-#
-your_chest;You open the chest;[0,2]
-dagger;your trusty dagger. Should be useful;grabable;[1,0,0];sword
-back;try moving away from the chest;door;[0,1];unlocked
-#
-entrance;As you aproach the entrance to the dungeon you feel the fear rise in you. Its about to get serious;[2,0]
-back;trail leading back to the forest;door;[1,0];unlocked
-entrance;entrance to the dungeon, it will be hard to enter;door;[3,0];unlocked
-tree;a tall oak tree;none
-#
-village;As you tell your mother goodbye, you are filled with determination. you will find the sacred treasure in the dark dungeon. adventure awaits!;[0,0]
-money;a few copper coins;grabable;[0,0,0];none
-forest;the trail from the village leads into the dark forest nearby;door;[1,0];unlocked
-home;go back home;door;[0,1];unlocked
-tony;it's tony the chef;npc;vendor;cheese_[1,0,1]_none;money
 rocco;it's your ol' buddy rocco;npc;chatter;Hey how ya doin' tough guy!_Who you kiddin' huh?_Hey get me some pasta sauce if you find it alright?_ I am walking here
 #
 home;Your sweet home;[0,1]
@@ -102,7 +80,7 @@ right;to the right you can see a big open space;door;[2,3];unlocked
 metal_door;a large metal door leading forward. it needs a key;door;[3,4];locked
 #
 path_left;The scribbles on the walls remind you of tony's stromboli 👌;[4,3]
-back;Behind you there is the open door and the crossroad;[3,3];unlocked
+back;Behind you there is the open door and the crossroad;door;[3,3];unlocked
 forward;you see a tunnel leading towards a possibly empty room;door;[5,3];unlocked
 left;there is a hallway leading towards a dark room;door;[4,2];unlocked
 bucket;a suspiciously smelly bucket;grabable;[0,1,-5];helmet
@@ -121,7 +99,7 @@ slime;thick slime is covering the walls;none
 #
 mimic;the chest has come alive, and sharp teeth come chomping for your member;[4,1]
 mimic;a hungry chest-like monster;enemy;[4,4,0,25];[];0
-back;try moving back into the room;door;[3,2];unlocked
+back;try moving back into the room;door;[4,2];unlocked
 #
 slide_1;As you approach the shiny object the floor crubles below you. Just in time you grab a root sticking from the wall. You cannot climb back up;[5,2]
 down;there is only one option, let go and fall;door;[6,2];unlocked
@@ -130,24 +108,24 @@ root;a root sticking from the wall. its not gonna hold much longer;none
 room_under;You fall hard on the floor. You got away just with a few bruises. The shiny object lies in front of you.;[6,2]
 hole;hole in the ceiling;none
 forward;there is a hallway in front of you;door;[7,2];unlocked
-ring;a saphirre ring, who knows what it does;[1,-1,0];ring
+ring;a saphirre ring, who knows what it does;grabable;[1,-1,0];ring
 torch;a lit torch;none
 #
 hallway_under;You enter a hallway branching in two.;[7,2]
 left;you feel warmth coming from your left;door;[7,1];unlocked
-back;you can go back, but as you know it's a dead end;[6,2];unlocked
+back;you can go back, but as you know it's a dead end;door;[6,2];unlocked
 right;it smells weird to your right, i wouldn't go there;door;[7,3];unlocked
 ruggle;a pile of rubble on the floor;none
 #
 goblin_3;The darness of the warm room scares you a bit;[7,1]
 back;behind you there is the hallway you just walked through;door;[7,2];unlocked
 chest;a chest in the corner of the room;door;[6,1];unlocked
-large goblin;an overgrown goblin;enemy;[3,6,20,5];[];0
+large_goblin;an overgrown goblin;enemy;[3,6,20,5];[];0
 ashes;there are ashes lying in the corner of the room, probably from a recent fire;none
 #
 chest_under;You open the chest.;[6,1]
-shield_1;a shiny shield! this will be usefull against foes;grabable;[0,3,10];shield
-back;might try moving back to the room;door[7,1]
+shield;a shiny shield! this will be usefull against foes;grabable;[0,3,10];shield
+back;might try moving back to the room;door;[7,1];unlocked
 #
 hallway_back;Finding your way back, you notice a door in the side. a sign says: welcome;[7,3]
 back;behind you is the hallway;door;[7,2];unlocked
@@ -204,7 +182,7 @@ wasp_nest;the wasp nest. it seems to be empty;none
 #
 wasp_man;It's the wasp man, you know! What is he doing here?;[0,3]
 cuomo;Ah! get away from me!Its okay i wont hurt you. do you have a key to the next room? Give me a weapon so i can defend myself. A rock or something, and ill give you the key!;npc;vendor;key_[0,0,0]_none;rock
-back;go back;door;[1,3],unlocked
+back;go back;door;[1,3];unlocked
 #
 final_1;You enter the final room, smell of spoiled cheese fills your nasal cavities. You see him, the Obese mouse Mike. You will either die here or best this beast....;[3,4]
 obese_mouse_boss;Obese mouse boss. You tremble with fear. Fucking mouse!;enemy;[5,15,15,10];[[key,0,0,0,none]];0
