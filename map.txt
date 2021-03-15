@@ -99,10 +99,10 @@ right;to the right there is something shiny in the right side of the room;door;[
 slime;thick slime is covering the walls;none
 #
 mimic;the chest has come alive, and sharp teeth come chomping for your member;[4,1]
-mimic;a hungry chest-like monster;enemy;[5,4,0,25];[];0
+mimic;a hungry chest-like monster;enemy;[4,4,0,25];[];0
 back;try moving back into the room;door;[3,2];unlocked
 #
-slide_1;As you approach the shiny object the floor crubles below you. Just in time you grab a root sticking from the wall. You cannot climb back up;[0,0]
+slide_1;As you approach the shiny object the floor crubles below you. Just in time you grab a root sticking from the wall. You cannot climb back up;[5,2]
 down;there is only one option, let go and fall;door;[6,2];unlocked
 root;a root sticking from the wall. its not gonna hold much longer;none
 #
@@ -172,6 +172,7 @@ scribbles;you can see weird scribbles on the wall. it looks like an ancient lang
 #
 open_5;this corner of the room is a bit darker. grass doesnt grow here;[1,1]
 back;there doesn't seem to be anything special there;door;[1,2];unlocked
+health_potion;A health potion, this will be useful later;grabable;[0,5,0];none
 right;there doesn't seem to be anything special there;door;[2,1];unlocked
 #
 wasp_2;Another wasp nest! this isnt funny anymore;[2,1]
@@ -184,6 +185,12 @@ wasp_man;It's the wasp man, you know! What is he doing here?;[0,3]
 cuomo;Ah! get away from me!Its okay i wont hurt you. do you have a key to the next room? Give me a weapon so i can defend myself. A rock or something, and ill give you the key!;npc;vendor;key_[0,0,0]_none;rock
 back;go back;door;[1,3],unlocked
 #
-large_room2;This is it. Soon there will be more of Cuomo the wasp man and spanglish wizard!;[3,4]
-door;door;door;[3,3]
+final_1;You enter the final room, smell of spoiled cheese fills your nasal cavities. You see him, the Obese mouse Mike. You will either die here or best this beast....;[3,4]
+obese_mouse_boss;Obese mouse boss. You tremble with fear. Fucking mouse!;enemy;[5,15,15,10];[[key,0,0,0,none]];0
+metal_door;The door locked behind you. You can not leave;none
+piles_of_cheese;Huge piles of old cheese, they smell disgusting;none
+exit;Your way out of here, the mighty mouse holds the key.;door;[2,4];locked
+#
+exit;You made it outside with hefty pile of cheese, but your adventure has only just began.;[2,4]
+end;end;end;none
 #
