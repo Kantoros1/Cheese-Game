@@ -322,12 +322,12 @@ def find_room(pointer): # Searches all rooms until it finds the same index, retu
 def console(): # Main class
     global world_map, map_pointer, player_health, cheese_mode, death, lastroom, basic_len, equiped_len, playerInv
     roomInx = world_map[map_pointer] # Copy room into buffer RoomInx
-    room = [*[x[0] for x in roomInx][1:],'room'] # Creates a list of thing in the room
 
     # Create monster
     x = 0 # Current index
     for item in roomInx[1:]:
-        x += 1 
+        x += 1
+        
         if item[2] == 'enemy': # Test type
             monster_stats.append([item[0],*[int(i) for i in item[3][1:-1].split(',')]]) # Every time i use * i want to stop coding and go live in the woods alone
             playerInvsetup(item)
@@ -336,8 +336,18 @@ def console(): # Main class
             del world_map[map_pointer][x] # Delete monster from map
             x -= 1 # Compensate for deleted monster
 
+        elif item[2] == 'end':
+            death = True
+            print("\n\
+#####  #   #  #### \n\
+#      ##  #  #  ##\n\
+###    # # #  #   #\n\
+#      #  ##  #  ##\n\
+#####  #   #  ####")
+
     print('> ',end='')
     inp = input().lower().split() # Basic pre-processing
+    inp += [None] * (3 - len(inp)) # Pad to 3 arguments in list
 
     if len(inp) == 0:
         print('- You do nothing...')
@@ -350,7 +360,20 @@ def console(): # Main class
             print('- chesse')
 
     elif inp[0] == 'help':
-            print('- possible commands:\n* help\n* save\n* end\n* examine [object]\n* grab/take [object]\n* drop[object]\n* attack [monster]\n* ask/join [companion]\n* move [door]\n* cheese')
+            print("- Possible commands:\n\
+* Help - List all commands\n\
+* Examine/look [object] - Examine object or person\n\
+* Grab/Take [item] - Grab item and put it in your inventory\n\
+* Drop/leave [item] - Drop an item from your inventory on the ground\n\
+* Equip [item] - Equip an item from your inventory\n\
+* Unequip [item] - See above in reverse\n\
+* Move/Open [path/chest] - Open a chest or go down a path\n\
+* Attack [monster] - attack a monster\n\
+* Ask/Join [companion] - Convince an npc to help fight with you\n\
+* Give [companion] [item] - Give an item to your companion\n\
+* Equip/Unequip/Drop [companion] [item] - See above but for companion\n\
+* Buy [item] - buy an item from a seller NPC")
+            
     elif inp[0] == 'end':
             death = True
             return
@@ -358,10 +381,10 @@ def console(): # Main class
             save()
         
     elif inp[0] in ['examine','look']: # Examine command
-        if inp[1] in ['room','all','everything']: # If specified, will list all items in room
+        if inp[1] in ['room','all','everything',None]: # If specified, will list all items in room
             print('- The room contains:')
-            for i in room[:-1]:
-                print('* ' + i)
+            for item in roomInx[1:]:
+                print('* ' + item[0] + ' - '+ item[2])
 
         elif inp[1] in ['self','me','myself']:
             print('* You have {0} attack and {1} health'.format(*monster_stats[0][1:3]))
@@ -382,7 +405,7 @@ def console(): # Main class
                             print("* you can trade " + stuff[0] + ' for ' + item[5])
                                 
                         if item[3] == "chatter":
-                            print(random.choice(stuff))
+                            print('- ' + random.choice(stuff))
                     
                     break
             else:
