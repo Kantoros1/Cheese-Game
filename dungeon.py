@@ -144,7 +144,7 @@ def companion_attack():
         
 def attack(victim, attacker, attacker_position, victim_position): #Damage being dealt
     
-    evade = randint(1,100)
+    evade = random.randint(1,100)
     if evade <= int(monster_stats[victim_position][4]):
         print("! " + victim + " evaded the attack, so no damage was dealt.")
         return 
@@ -281,12 +281,13 @@ def playerInvsetup(item):
     playerInv.append([])
     if [i for i in item[4][2:-2].split(',')] != ['']:  # check if after split, the list is not empty (if the entity has any objects)
         for y in range(len([i for i in item[4][2:-2].split('[')])): # goes through the lenght of the list, if split
-            playerInv[int(len(monster_stats)/5) + 1].append([i for i in item[4][2:-2].replace('[','').replace(' ','').split(']')[z].split(',')])
+            playerInv[int(len(monster_stats)) -1].append([i for i in item[4][2:-2].replace('[','').replace(' ','').split(']')[z].split(',')])
             if z > 0:
-                playerInv[int(len(monster_stats)/5) + 1][z].remove(playerInv[int(len(monster_stats)/5) + 1][z][0])
+                playerInv[int(len(monster_stats))-1][z].remove(playerInv[int(len(monster_stats)) + 1][z][0])
             z+=1
     equiped_len.append(int(item[5]))
-        
+
+
     if int(item[5]) > 0: # checks if there are any equiped items
         monster = True
         for i in range(equiped_len[-1]): # adds the value of equiped items to stats
@@ -319,7 +320,7 @@ def find_room(pointer): # Searches all rooms until it finds the same index, retu
             i += 1
         return
     
-def console(): # Main class
+def console(inp = None): # Main class
     global world_map, map_pointer, player_health, cheese_mode, death, lastroom, basic_len, equiped_len, playerInv
     roomInx = world_map[map_pointer] # Copy room into buffer RoomInx
 
@@ -346,12 +347,14 @@ def console(): # Main class
 #####  #   #  ####")
 
     print('> ',end='')
-    inp = input().lower().split() # Basic pre-processing
+    if inp == None:
+        inp = input().lower().split() # Basic pre-processing
+    else:
+        inp = inp.lower().split()
     inp += [None] * (3 - len(inp)) # Pad to 3 arguments in list
 
-    if len(inp) == 0:
+    if inp[0] == None:
         print('- You do nothing...')
-
     elif inp[0] == 'cheese':
         print('- cheese')
         try:
@@ -526,9 +529,7 @@ def console(): # Main class
                     monster_stats.insert(basic_len, [item[0],*[int(i) for i in item[3][1:-1].split(',')]]) #make the companion active
 
                     playerInvsetup(item) 
-                    print(playerInv)
-                    print(equiped_len)
-
+                
                     print('! ' + item[1])
                     print('- {3}\'s attack: {0}, {3}\'s health: {1}, {3}\'s armor: {2}'.format(monster_stats[basic_len][1], monster_stats[basic_len][2],monster_stats[basic_len][3],monster_stats[basic_len][0]))
                     del world_map[map_pointer][x]
@@ -559,7 +560,7 @@ def console(): # Main class
                     if item[5] in list(chain.from_iterable(playerInv[0])):
                         playerInv[0].append([sell[0],*[int(i) for i in sell[1][1:-1].split(',')], sell[2]])
                         playerInv[0].remove(playerInv[0][int(list(chain.from_iterable(playerInv[0])).index(item[5]) / 5)])
-                        print('- You just bought cheese')
+                        print('- You just bought ' + sell[0])
                         break
         else:
             print("? Nobody got that.")
@@ -574,7 +575,8 @@ def console(): # Main class
         monster_stats[0][2] = player_health
     else:
         monster_attack()
-        companion_attack()
+        if death == False:
+            companion_attack()
     
 # --------- Global variables ---------
 
@@ -590,11 +592,16 @@ playerInv = [[]] # Player inventory with stats. 2D list
 basic_len = 1
 equiped_len = [0]
 classes = {'regular':['player',3,10,12,5],'tank':['player',2,15,10,2],'rogue':['player',4,7,15,10]}
+commands = ['grab money','buy cheese','equip cheese', 'move home', 'move chest', 'grab dagger', 'equip dagger', 'move back', 'move outside', 'move forest', 'move forward', 'move entrance', 'move hallway', 'move forward', 'attack wasp_1', 'attack wasp_2', 'attack wasp_3', 'move door', 'move chest', 'grab key', 'grab iron_sword', 'equip iron_sword', 'move back', 'move back', 'move back', 'move back', 'move left', 'attack goblin', 'grab sleeve', 'equip sleeve', 'move metal_door', 'move forward', 'move left', 'grab bucket', 'equip bucket', 'move left', 'attack goblin', 'grab can', 'equip can', 'move right', 'move down', 'grab ring', 'equip ring', 'move forward', 'move left', 'attack large_goblin', 'move chest', 'grab shield', 'move back', 'move back', 'move right', 'move door', 'grab rock', 'move back', 'move forward', 'move jump', 'move back', 'move back', 'move right', 'move forward', 'move person', 'buy key', 'move back', 'move right', 'ask rat', 'move back', 'move back', 'move hallway', 'move metal_door']
 
 # ------ init -----
 menu()
 readFile()
 find_room(lastroom)
+i = 0
 
+#for i in range(len(commands)):
+    #console(commands[i])
 while death == False:
     console()
+    
