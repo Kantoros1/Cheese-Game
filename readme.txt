@@ -1,11 +1,10 @@
 Thank you for downloading cheesegame, the offical debut of dark souls. Also known as dark souls II 2: the covenant. 
 
-
-How to play: 
+---- How to play: ----
 
 First, make sure you have a python interpreter (Python) installed. To launch the game, double click the ‘dungeon.py’ file in the main directory. You can then play by typing commands in the console window. Before the game itself begins, you need to select a player class. 
 
-Commands 
+---- Commands ----
 
 These are all the commands you can use in the game: 
 
@@ -17,9 +16,9 @@ Look self – List your current attack and health.
 
 Look [name] - Describe a specific object, door, or monster, including their stats. 
 
-Move [room_name] - When you want to move over the map you use this function. 
+Move [room name] - When you want to move over the map you use this function. 
 
-Open [chest_name] - When you want to open a chest you use this function. 
+Open [chest name] - When you want to open a chest you use this function. 
 
 Grab [name] - Put grabbable item in your inventory. 
 
@@ -41,17 +40,16 @@ Join [companion] - If you find a companion, you can ask them to join you and hel
 
 Buy [item] - If you find an NPC and it’s a vendor, you can buy stuff from them. If you have the item necessary for exchange you just write buy + name of the item you aim to buy. 
 
-Map 
+---- Map ----
 
 Navigating around the map can get a little complicated. Here is a small guide to get you started: 
 
-Village – Forest – Entrance -  
+#Village# – #Forest# – #Entrance# -  
    | 
-
- Home 
+#Home# 
  
 There are the first 4 locations. You start in the ‘Village’, and can move into the forest, or go back home, by typing “move forest” into the console. If you get easily confused, you can take notes of the layout on a piece of paper next to you.  
 
-Save files 
+---- Save files ----
 
 You can save your progress at any time by typing the command ‘save’. Next time you start the game you will get the option to reload it, or start a new game.  
