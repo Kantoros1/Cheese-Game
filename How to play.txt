@@ -14,6 +14,8 @@ Look room – List all the objects, doors, entities, and monsters in the room. O
 
 Look self – List your current attack and health. 
 
+Look inventory - List of all the items you hold.
+
 Look [name] - Describe a specific object, door, or monster, including their stats. 
 
 Move [room name] - When you want to move over the map you use this function. 
