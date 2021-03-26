@@ -391,6 +391,10 @@ def console(inp = None): # Main class
 
         elif inp[1] in ['self','me','myself']:
             print('* You have {0} attack and {1} health'.format(*monster_stats[0][1:3]))
+        elif inp[1] == 'inventory':
+            print('* You currently have these items in your inventory : ')
+            for i in playerInv[0]:
+                print('* ' + i[0])
             
         elif inp[1] in list(chain.from_iterable(monster_stats)):
                 inx = int(list(chain.from_iterable(monster_stats)).index(inp[1]) / 5)
